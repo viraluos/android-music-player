@@ -19,9 +19,9 @@
 
         <!-- Hero Image Canzone Corrente -->
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         android:id="@+id/heroImage"
+        android:layout_width="match_parent"
+        android:layout_height="286dp"
         android:layout_gravity="bottom"
         android:translationY="0dp" /> <!-- Metti un valore valido -->
 
@@ -29,7 +29,7 @@
     <FrameLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="91dp"
         android:layout_gravity="bottom"
         android:clickable="true"
         android:focusable="true">

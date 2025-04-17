@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Music Player</string>
+    <string name="song_format">%1$s - %2$s</string>
 </resources>

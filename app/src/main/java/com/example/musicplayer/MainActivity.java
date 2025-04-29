@@ -4,15 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.musicplayer.data.api.ApiClient;
-import com.example.musicplayer.data.api.SongApi;
-import com.example.musicplayer.data.model.Song;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.musicplayer.data.local.SongDao;
+import com.example.musicplayer.data.local.SongDbHelper;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -20,25 +13,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SongApi api = ApiClient.getClient().create(SongApi.class);
-        api.getAllSongs().enqueue(new Callback<List<Song>>() {
-            @Override
-            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
-                if (response.isSuccessful()) {
-                    assert response.body() != null;
-                    for (Song song : response.body()) {
-                        Log.d("DEBUG_SONG", song.title + " - " + song.author);
-                    }
-                } else {
-                    Log.e("DEBUG_SONG", "Errore HTTP: " + response.code());
-                }
-            }
+        // Verifica la struttura del database
+        SongDbHelper dbHelper = new SongDbHelper(this);
+        dbHelper.isTableValid();
+        dbHelper.close();
 
-            @Override
-            public void onFailure(Call<List<Song>> call, Throwable t) {
-                Log.e("DEBUG_SONG", "Errore di rete: " + t.getMessage());
-            }
-        });
+        SongDao songDao = new SongDao(this);
+
+        if(songDao.getAllSongs().isEmpty()) {
+            songDao.importFromJson(getApplicationContext());
+        }
+
+        Log.v("DEBUG_SONG", songDao.toString());
 
     }
 }

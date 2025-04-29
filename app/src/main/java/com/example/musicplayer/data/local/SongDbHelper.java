@@ -19,7 +19,7 @@ public class SongDbHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_SONGS =
             "CREATE TABLE " + TABLE_SONGS + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_ID + " TEXT PRIMARY KEY, " +
                     COLUMN_TITLE + " TEXT NOT NULL, " +
                     COLUMN_AUTHOR + " TEXT, " +
                     COLUMN_PATH + " TEXT NOT NULL);";

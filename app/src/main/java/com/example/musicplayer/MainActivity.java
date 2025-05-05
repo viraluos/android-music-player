@@ -20,25 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SongApi api = ApiClient.getClient().create(SongApi.class);
-        api.getAllSongs().enqueue(new Callback<List<Song>>() {
-            @Override
-            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
-                if (response.isSuccessful()) {
-                    assert response.body() != null;
-                    for (Song song : response.body()) {
-                        Log.d("DEBUG_SONG", song.title + " - " + song.author);
-                    }
-                } else {
-                    Log.e("DEBUG_SONG", "Errore HTTP: " + response.code());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<Song>> call, Throwable t) {
-                Log.e("DEBUG_SONG", "Errore di rete: " + t.getMessage());
-            }
-        });
 
     }
 }

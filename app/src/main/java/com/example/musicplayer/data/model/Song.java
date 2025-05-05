@@ -4,5 +4,6 @@ public class Song {
     public String id;
     public String title;
     public String author;
-    public String url; // se ti serve
+    public String image;
+    public String song_path;
 }

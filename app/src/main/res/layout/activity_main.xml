@@ -8,6 +8,10 @@
 
     <!-- Immagine Canzone Corrente -->
 
+    <!-- Metti un valore valido -->
+
+        <!-- Mini Player -->
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="399dp"> <!-- oppure wrap_content, a seconda del caso -->
@@ -51,11 +55,10 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/heroImage"
         android:layout_width="match_parent"
-        android:layout_height="286dp"
+        android:layout_height="206dp"
         android:layout_gravity="bottom"
-        android:translationY="0dp" /> <!-- Metti un valore valido -->
+        android:translationY="0dp" />
 
-        <!-- Mini Player -->
     <FrameLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"

@@ -4,189 +4,149 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-        <!-- Lista Playlist -->
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
-    <!-- Immagine Canzone Corrente -->
+    <!-- Hero Image (Album Art) -->
+    <ImageView
+        android:id="@+id/heroImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/album_art"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-    <!-- Metti un valore valido -->
-
-        <!-- Mini Player -->
-
+    <!-- Content Area -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="399dp"> <!-- oppure wrap_content, a seconda del caso -->
+        android:layout_height="match_parent"
+        android:layout_marginTop="230dp"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingTop="16dp"
+            android:background="@color/background_color">
 
+            <!-- App Bar with Logo and Profile -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp"
+                android:showDividers="middle"
+                android:divider="@drawable/divider">
 
                 <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="122dp"
-                    android:layout_height="90dp"
-                    android:layout_marginBottom="10dp"
-                    tools:srcCompat="@drawable/musxfy_high_resolution_logo" />
+                    android:id="@+id/app_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/logo"
+                    tools:srcCompat="@raw/logo" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="126dp"
-                    android:layout_height="90dp"
-                    android:layout_marginStart="150dp"
-                    app:srcCompat="@drawable/pfp" />
+                    android:id="@+id/profile_picture"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:background="@drawable/circle_background"
+                    android:contentDescription="@string/pfp"
+                    android:padding="4dp"
+                    app:srcCompat="@raw/pfp" />
             </LinearLayout>
 
+            <!-- Playlist Section -->
             <LinearLayout
                 android:id="@+id/playlist_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|center_horizontal|center_vertical"
-                android:background="@color/material_dynamic_neutral20"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingHorizontal="16dp">
 
                 <TextView
-                    android:layout_width="347dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/tutte_le_playlist"
+                    android:background="@drawable/rounded_background"
+                    android:gravity="left"
+                    android:padding="14dp"
+                    android:text="@string/tutte_le_canzoni"
+                    android:textColor="@color/primary_text"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:textStyle="bold"
+                    android:elevation="4dp"/>
 
+                <!-- Additional playlist items would go here -->
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/heroImage"
-        android:layout_width="match_parent"
-        android:layout_height="206dp"
-        android:layout_gravity="bottom"
-        android:translationY="0dp" />
-
+    <!-- Mini Player -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
-        android:layout_height="111dp"
+        android:layout_height="80dp"
         android:layout_gravity="bottom"
-        android:background="#36101F"
+        android:background="@color/mini_player_background"
+        android:elevation="8dp"
         android:clickable="true"
         android:focusable="true">
-        <!-- Contenuto mini player -->
 
         <ImageView
-            android:id="@+id/rew"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/rounded_border"
-            android:contentDescription="@string/rew"
+            android:id="@+id/song_cover"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.367"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.789"
-            app:srcCompat="@android:drawable/ic_media_rew"/>
-
-        <ImageView
-            android:id="@+id/ff"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/rounded_border"
-            android:contentDescription="@string/fwd"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.551"
-            app:layout_constraintStart_toEndOf="@+id/rew"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.789"
-            app:srcCompat="@android:drawable/ic_media_ff" />
-
-        <ImageView
-            android:id="@+id/pause"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="38dp"
-            android:layout_marginEnd="38dp"
-            android:background="@drawable/rounded_border"
-            android:contentDescription="@string/pause"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ff"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/rew"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.789"
-            app:srcCompat="@android:drawable/ic_media_pause" />
-
-        <ImageView
-            android:id="@+id/icona"
-            android:layout_width="57dp"
-            android:layout_height="61dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="45dp"
-            android:layout_marginBottom="26dp"
-            android:contentDescription="@string/icona"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="152dp"
-            android:fontFamily="@font/days_one"
-            android:text="@string/titolo_canzone"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/icona"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.75" />
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/song_cover"
+            app:layout_constraintStart_toEndOf="@id/song_cover"
+            app:layout_constraintTop_toTopOf="@id/song_cover">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
-            android:layout_marginEnd="231dp"
-            android:layout_marginBottom="2dp"
-            android:fontFamily="@font/days_one"
-            android:text="@string/autore"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toTopOf="@+id/rew"
+            <TextView
+                android:id="@+id/song_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/primary_text"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="Song Title" />
+
+            <TextView
+                android:id="@+id/song_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/secondary_text"
+                android:textSize="12sp"
+                tools:text="Artist Name" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_play_pause"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_background"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/icona"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/play" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Fullscreen Player (nascosto inizialmente) -->
-    <!--<FrameLayout
-        android:id="@+id/fullPlayer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-        Contenuto full player
-    </FrameLayout>-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

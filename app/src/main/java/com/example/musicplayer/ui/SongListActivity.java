@@ -3,18 +3,24 @@ package com.example.musicplayer.ui;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.ImageLoader;
 import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.ApiClient;
 import com.example.musicplayer.data.api.SongApiService;
 import com.example.musicplayer.data.api.Song;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,16 +29,23 @@ import retrofit2.Response;
 
 public class SongListActivity extends AppCompatActivity {
 
-    private LinearLayout songsContainer;
+    private RecyclerView songsRecyclerView;
     private TextView errorTextView;
+    private SongAdapter songAdapter;
+    private List<Song> songList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
-        songsContainer = findViewById(R.id.songs_container);
+        songsRecyclerView = findViewById(R.id.songs_container);
         errorTextView = findViewById(R.id.errorText);
+
+        // Setup RecyclerView
+        songsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        songAdapter = new SongAdapter(songList);
+        songsRecyclerView.setAdapter(songAdapter);
 
         loadSongs();
     }
@@ -47,7 +60,13 @@ public class SongListActivity extends AppCompatActivity {
                 hideLoading();
 
                 if (response.isSuccessful() && response.body() != null) {
-                    displaySongs(response.body());
+                    songList.clear();
+                    songList.addAll(response.body());
+                    songAdapter.notifyDataSetChanged();
+
+                    if (songList.isEmpty()) {
+                        showEmptyMessage();
+                    }
                 } else {
                     showError("Errore nel caricamento: " + response.code());
                     Log.e("API_ERROR", "Response error: " + response.errorBody());
@@ -63,69 +82,89 @@ public class SongListActivity extends AppCompatActivity {
         });
     }
 
-    private void displaySongs(List<Song> songs) {
-        songsContainer.removeAllViews();
-
-        if (songs.isEmpty()) {
-            showEmptyMessage();
-            return;
-        }
-
-        for (Song song : songs) {
-            View songView = createSongView(song);
-            songsContainer.addView(songView);
-        }
-    }
-
-    private View createSongView(Song song) {
-        View view = getLayoutInflater().inflate(R.layout.block_song, null);
-
-        TextView titleView = view.findViewById(R.id.songTitle);
-        TextView authorView = view.findViewById(R.id.songAuthor);
-        ImageView imageView = view.findViewById(R.id.songImage);
-
-        titleView.setText(song.getTitle());
-        authorView.setText(song.getAuthor());
-
-        if (song.getImage() != null && !song.getImage().isEmpty()) {
-            String imageUrl = song.getImage();
-
-            ImageLoader.loadImage(getApplicationContext(), imageUrl, imageView);
-        }
-        else imageView.setImageResource(R.drawable.default_image); // default
-
-        view.setOnClickListener(v -> {
-            Toast.makeText(this, "Avvio riproduzione: " + song.getTitle(), Toast.LENGTH_SHORT).show();
-            // TODO: logica di riproduzione qui | playSong(song.getSongPath());
-        });
-
-        return view;
-    }
-
     private void showLoading() {
-        songsContainer.setVisibility(View.GONE);
+        songsRecyclerView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
     }
 
     private void hideLoading() {
-        songsContainer.setVisibility(View.VISIBLE);
+        songsRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void showError(String message) {
+        errorTextView.setVisibility(View.VISIBLE);
         errorTextView.setText(message + "\n\nTocca per riprovare");
         errorTextView.setOnClickListener(v -> {
             errorTextView.setVisibility(View.GONE);
             loadSongs();
         });
-        errorTextView.setText(message);
         errorTextView.setTextColor(Color.RED);
-        errorTextView.setVisibility(View.VISIBLE);
-        songsContainer.setVisibility(View.GONE);
+        songsRecyclerView.setVisibility(View.GONE);
     }
 
     private void showEmptyMessage() {
         errorTextView.setText("Nessuna canzone disponibile");
         errorTextView.setTextColor(Color.BLACK);
         errorTextView.setVisibility(View.VISIBLE);
+        songsRecyclerView.setVisibility(View.GONE);
+    }
+
+    // Song Adapter class
+    private class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
+        private List<Song> songs;
+
+        public SongAdapter(List<Song> songs) {
+            this.songs = songs;
+        }
+
+        @NonNull
+        @Override
+        public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.block_song, parent, false);
+            return new SongViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
+            Song song = songs.get(position);
+            holder.bind(song);
+        }
+
+        @Override
+        public int getItemCount() {
+            return songs.size();
+        }
+
+        class SongViewHolder extends RecyclerView.ViewHolder {
+            private TextView titleView;
+            private TextView authorView;
+            private ImageView imageView;
+
+            public SongViewHolder(@NonNull View itemView) {
+                super(itemView);
+                titleView = itemView.findViewById(R.id.songTitle);
+                authorView = itemView.findViewById(R.id.songAuthor);
+                imageView = itemView.findViewById(R.id.songImage);
+            }
+
+            public void bind(Song song) {
+                titleView.setText(song.getTitle());
+                authorView.setText(song.getAuthor());
+
+                if (song.getImage() != null && !song.getImage().isEmpty()) {
+                    ImageLoader.loadImage(getApplicationContext(), song.getImage(), imageView);
+                } else {
+                    imageView.setImageResource(R.drawable.default_image);
+                }
+
+                itemView.setOnClickListener(v -> {
+                    Toast.makeText(SongListActivity.this,
+                            "Avvio riproduzione: " + song.getTitle(),
+                            Toast.LENGTH_SHORT).show();
+                    // TODO: logica di riproduzione
+                });
+            }
+        }
     }
 }

@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Background colors -->
+    <color name="background_color">#121212</color>
+    <color name="card_background">#2E2E2E</color>
+    <color name="mini_player_background">#1A1A1A</color>
+
+    <!-- Text colors -->
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#B3B3B3</color>
+
+    <!-- Accent colors -->
+    <color name="accent_color">#BB86FC</color>
 </resources>

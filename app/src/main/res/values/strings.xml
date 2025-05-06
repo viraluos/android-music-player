@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Music Player</string>
     <string name="song_format">%1$s - %2$s</string>
-    <string name="tutte_le_playlist">Tutte le playlist 🎶</string>
+    <string name="tutte_le_canzoni">Playlist generale 🎶</string>
     <string name="rew">Rewind</string>
+    <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="fwd">Forward</string>
     <string name="icona">Icona</string>
@@ -10,4 +11,7 @@
     <string name="autore">Autore</string>
     <string name="logo">Logo</string>
     <string name="song_image">Image of current song</string>
+    <string name="pfp">Profile picture</string>
+    <string name="album_art">Hero image</string>
+    <string name="more_options">Più opzioni</string>
 </resources>

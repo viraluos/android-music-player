@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config>
+        <domain includeSubdomains="true">147.93.52.193</domain>
         <domain includeSubdomains="true">viraluos.com</domain>
         <domain includeSubdomains="true">www.viraluos.com</domain>
         <trust-anchors>
             <certificates src="system"/>
-            <certificates src="user"/>
+            <certificates src="@raw/viraluos_cert"/>
         </trust-anchors>
     </domain-config>
+
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="@raw/viraluos" />
+        </trust-anchors>
+    </base-config>
 </network-security-config>

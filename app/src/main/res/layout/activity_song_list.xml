@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
@@ -70,28 +71,28 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="@drawable/rounded_border"
+            android:contentDescription="@string/rew"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.367"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.789"
-            app:srcCompat="@android:drawable/ic_media_rew"
-            android:contentDescription="@string/rew">
+            app:srcCompat="@android:drawable/ic_media_rew">
 
         <ImageView
             android:id="@+id/ff"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="@drawable/rounded_border"
+            android:contentDescription="@string/fwd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.551"
             app:layout_constraintStart_toEndOf="@+id/rew"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.789"
-            app:srcCompat="@android:drawable/ic_media_ff"
-            android:contentDescription="@string/fwd"/>
+            app:srcCompat="@android:drawable/ic_media_ff" />
 
         <ImageView
             android:id="@+id/pause"
@@ -100,14 +101,14 @@
             android:layout_marginStart="38dp"
             android:layout_marginEnd="38dp"
             android:background="@drawable/rounded_border"
+            android:contentDescription="@string/pause"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ff"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/rew"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.789"
-            app:srcCompat="@android:drawable/ic_media_pause"
-            android:contentDescription="@string/pause" />
+            app:srcCompat="@android:drawable/ic_media_pause" />
 
         <ImageView
             android:id="@+id/icona"
@@ -117,13 +118,12 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="45dp"
             android:layout_marginBottom="26dp"
+            android:contentDescription="@string/icona"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="@string/icona"
-            />
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/textView"

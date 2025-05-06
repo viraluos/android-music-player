@@ -9,4 +9,5 @@
     <string name="titolo_canzone">Titolo Canzone</string>
     <string name="autore">Autore</string>
     <string name="logo">Logo</string>
+    <string name="song_image">Image of current song</string>
 </resources>

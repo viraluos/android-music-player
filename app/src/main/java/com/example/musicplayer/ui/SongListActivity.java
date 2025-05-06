@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +24,6 @@ import retrofit2.Response;
 public class SongListActivity extends AppCompatActivity {
 
     private LinearLayout songsContainer;
-    private ProgressBar progressBar;
     private TextView errorTextView;
 
     @Override
@@ -34,7 +32,6 @@ public class SongListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_song_list);
 
         songsContainer = findViewById(R.id.songs_container);
-        progressBar = findViewById(R.id.progressBar);
         errorTextView = findViewById(R.id.errorText);
 
         loadSongs();
@@ -106,13 +103,11 @@ public class SongListActivity extends AppCompatActivity {
     }
 
     private void showLoading() {
-        progressBar.setVisibility(View.VISIBLE);
         songsContainer.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
     }
 
     private void hideLoading() {
-        progressBar.setVisibility(View.GONE);
         songsContainer.setVisibility(View.VISIBLE);
     }
 

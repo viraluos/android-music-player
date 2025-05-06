@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,36 +18,41 @@
         android:layout_width="match_parent"
         android:layout_height="399dp"> <!-- oppure wrap_content, a seconda del caso -->
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tv_title"
+            <ImageView
+                android:id="@+id/Logo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:text="Le mie playlist"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_height="95dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="10dp"
+                android:src="@tools:sample/avatars"
+                android:contentDescription="@string/logo"/>
 
             <LinearLayout
                 android:id="@+id/playlist_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center|center_horizontal|center_vertical"
                 android:background="@android:color/darker_gray"
                 android:clickable="true"
                 android:focusable="true"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:padding="16dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="347dp"
                     android:layout_height="wrap_content"
-                    android:text="Tutte le canzoni 🎶"
+                    android:background="@android:color/background_light"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/tutte_le_playlist"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -59,23 +66,117 @@
         android:layout_gravity="bottom"
         android:translationY="0dp" />
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"
-        android:layout_height="91dp"
+        android:layout_height="111dp"
         android:layout_gravity="bottom"
+        android:background="@color/material_dynamic_secondary40"
         android:clickable="true"
         android:focusable="true">
         <!-- Contenuto mini player -->
-    </FrameLayout>
 
-        <!-- Fullscreen Player (nascosto inizialmente) -->
-    <FrameLayout
+        <ImageView
+            android:id="@+id/rew"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/rounded_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.367"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.789"
+            app:srcCompat="@android:drawable/ic_media_rew"
+            android:contentDescription="@string/rew">
+
+        <ImageView
+            android:id="@+id/ff"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/rounded_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.551"
+            app:layout_constraintStart_toEndOf="@+id/rew"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.789"
+            app:srcCompat="@android:drawable/ic_media_ff"
+            android:contentDescription="@string/fwd"/>
+
+        <ImageView
+            android:id="@+id/pause"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginEnd="38dp"
+            android:background="@drawable/rounded_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ff"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/rew"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.789"
+            app:srcCompat="@android:drawable/ic_media_pause"
+            android:contentDescription="@string/pause" />
+
+        <ImageView
+            android:id="@+id/icona"
+            android:layout_width="57dp"
+            android:layout_height="61dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="26dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/icona"
+            />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="152dp"
+            android:fontFamily="@font/days_one"
+            android:text="@string/titolo_canzone"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icona"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.75" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:layout_marginEnd="231dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/days_one"
+            android:text="@string/autore"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/rew"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icona"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Fullscreen Player (nascosto inizialmente) -->
+    <!--<FrameLayout
         android:id="@+id/fullPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-        <!-- Contenuto full player -->
-    </FrameLayout>
+        Contenuto full player
+    </FrameLayout>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

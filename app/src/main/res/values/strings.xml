@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Music Player</string>
     <string name="song_format">%1$s - %2$s</string>
+    <string name="tutte_le_playlist">Tutte le playlist 🎶</string>
+    <string name="rew">Rewind</string>
+    <string name="pause">Pause</string>
+    <string name="fwd">Forward</string>
+    <string name="icona">Icona</string>
+    <string name="titolo_canzone">Titolo Canzone</string>
+    <string name="autore">Autore</string>
+    <string name="logo">Logo</string>
 </resources>

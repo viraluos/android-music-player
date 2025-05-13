@@ -38,7 +38,7 @@ public class SongListActivity extends AppCompatActivity {
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
 
-    private MediaPlayer mp = new MediaPlayer();
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,8 @@ public class SongListActivity extends AppCompatActivity {
         String playlistNameFromMainActivity = bundle.getString("playlistNameBundle");
 
         playlistNameText.setText(playlistNameFromMainActivity);
+
+        mp = new MediaPlayer();
 
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         songAdapter = new SongAdapter(songList);
@@ -174,16 +176,21 @@ public class SongListActivity extends AppCompatActivity {
                     try {
                         if (mp.isPlaying()) {
                             mp.stop();
-                            mp.reset();
                         }
 
-                        mp.setDataSource(song.getSongPath()); // path locale o URL
-                        mp.prepare();
-                        mp.start();
+                        mp.reset();
+                        mp.setDataSource(song.getSongPath());
+                        mp.setOnPreparedListener(MediaPlayer::start);
+                        mp.setOnErrorListener((mp, what, extra) -> {
+                            Toast.makeText(SongListActivity.this,
+                                    "Errore durante la riproduzione", Toast.LENGTH_SHORT).show();
+                            return true;
+                        });
+                        mp.prepareAsync();
                     } catch (IOException e) {
                         e.printStackTrace();
                         Toast.makeText(SongListActivity.this,
-                                "Errore nella riproduzione", Toast.LENGTH_SHORT).show();
+                                "Errore caricamento audio", Toast.LENGTH_SHORT).show();
                     }
 
                 });

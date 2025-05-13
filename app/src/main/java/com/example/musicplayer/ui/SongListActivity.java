@@ -158,17 +158,14 @@ public class SongListActivity extends AppCompatActivity {
                 titleView.setText(song.getTitle());
                 authorView.setText(song.getAuthor());
 
-                if (song.getImage() != null && !song.getImage().isEmpty()) {
-                    ImageLoader.loadImage(getApplicationContext(), song.getImage(), imageView);
-                } else {
-                    imageView.setImageResource(R.drawable.default_image);
-                }
+                if (song.getImage() != null && !song.getImage().isEmpty()) ImageLoader.loadImage(getApplicationContext(), song.getImage(), imageView);
+                else imageView.setImageResource(R.drawable.default_image);
 
                 itemView.setOnClickListener(v -> {
                     Toast.makeText(SongListActivity.this,
                             "Avvio riproduzione: " + song.getTitle(),
                             Toast.LENGTH_SHORT).show();
-                    // TODO: logica di riproduzione
+                            // TODO: logica di riproduzione
                 });
             }
         }

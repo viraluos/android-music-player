@@ -122,6 +122,20 @@ public class SongListActivity extends AppCompatActivity {
         songsRecyclerView.setVisibility(View.GONE);
     }
 
+    public void updateMiniPlayer(Song song) {
+        TextView title = findViewById(R.id.song_title);
+        TextView artist = findViewById(R.id.song_artist);
+        ImageView cover = findViewById(R.id.song_cover);
+
+        title.setText(song.getTitle());
+        artist.setText(song.getAuthor());
+        String imageUrl = song.getImage();
+        if (imageUrl != null && !imageUrl.isEmpty()) ImageLoader.loadImage(this, imageUrl, cover);
+        else cover.setImageResource(R.drawable.default_image);
+
+        findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
+    }
+
     // Song Adapter class
     private class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
         private List<Song> songs;
@@ -172,6 +186,8 @@ public class SongListActivity extends AppCompatActivity {
                     Toast.makeText(SongListActivity.this,
                             "Avvio riproduzione: " + song.getTitle(),
                             Toast.LENGTH_SHORT).show();
+
+                    updateMiniPlayer(song);
 
                     try {
                         if (mp.isPlaying()) {

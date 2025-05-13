@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/songPic"
-        android:layout_width="275dp"
-        android:layout_height="220dp"
+        android:layout_width="322dp"
+        android:layout_height="283dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,8 +85,8 @@
         android:id="@+id/nomeCanzone"
         android:layout_width="254dp"
         android:layout_height="33dp"
-        android:layout_marginStart="78dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/days_one"
         android:text="Nome canzone"
         android:textAlignment="center"

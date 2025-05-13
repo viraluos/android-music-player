@@ -1,6 +1,7 @@
 package com.example.musicplayer.ui;
 
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.ApiClient;
 import com.example.musicplayer.data.api.SongApiService;
 import com.example.musicplayer.data.api.Song;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,11 +164,28 @@ public class SongListActivity extends AppCompatActivity {
                 if (song.getImage() != null && !song.getImage().isEmpty()) ImageLoader.loadImage(getApplicationContext(), song.getImage(), imageView);
                 else imageView.setImageResource(R.drawable.default_image);
 
+                MediaPlayer mp = new MediaPlayer();
+
                 itemView.setOnClickListener(v -> {
                     Toast.makeText(SongListActivity.this,
                             "Avvio riproduzione: " + song.getTitle(),
                             Toast.LENGTH_SHORT).show();
-                            // TODO: logica di riproduzione
+
+                    try {
+                        if (mp.isPlaying()) {
+                            mp.stop();
+                            mp.reset();
+                        }
+
+                        mp.setDataSource(song.getSongPath()); // path locale o URL
+                        mp.prepare();
+                        mp.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(SongListActivity.this,
+                                "Errore nella riproduzione", Toast.LENGTH_SHORT).show();
+                    }
+
                 });
             }
         }

@@ -38,6 +38,8 @@ public class SongListActivity extends AppCompatActivity {
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
 
+    private MediaPlayer mp = new MediaPlayer();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,8 +165,6 @@ public class SongListActivity extends AppCompatActivity {
 
                 if (song.getImage() != null && !song.getImage().isEmpty()) ImageLoader.loadImage(getApplicationContext(), song.getImage(), imageView);
                 else imageView.setImageResource(R.drawable.default_image);
-
-                MediaPlayer mp = new MediaPlayer();
 
                 itemView.setOnClickListener(v -> {
                     Toast.makeText(SongListActivity.this,

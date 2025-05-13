@@ -26,7 +26,7 @@
                 android:divider="@drawable/divider"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
-                android:paddingBottom="16dp"
+                android:paddingBottom="16dp"s
                 android:showDividers="middle">
 
                 <ImageView

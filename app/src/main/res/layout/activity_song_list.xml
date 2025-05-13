@@ -21,7 +21,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/playlist_cover"
+                android:id="@+id/playlistCover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -37,7 +37,7 @@
                 app:layout_collapseMode="pin">
 
                 <TextView
-                    android:id="@+id/tv_title"
+                    android:id="@+id/playlistName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -53,7 +53,7 @@
 
     <!-- Song List -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/songs_container"
+        android:id="@+id/songsContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -136,12 +136,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
-        android:visibility="invisible"
         android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

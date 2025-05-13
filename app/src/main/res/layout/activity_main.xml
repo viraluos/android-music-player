@@ -7,38 +7,27 @@
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
-    <!-- Hero Image (Album Art) -->
-    <ImageView
-        android:id="@+id/heroImage"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/album_art"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <!-- Content Area -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="230dp"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/background_color"
             android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:background="@color/background_color">
+            android:paddingTop="16dp">
 
             <!-- App Bar with Logo and Profile -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:divider="@drawable/divider"
                 android:orientation="horizontal"
                 android:paddingHorizontal="16dp"
                 android:paddingBottom="16dp"
-                android:showDividers="middle"
-                android:divider="@drawable/divider">
+                android:showDividers="middle">
 
                 <ImageView
                     android:id="@+id/app_logo"
@@ -67,23 +56,23 @@
                 android:paddingHorizontal="16dp">
 
                 <TextView
+                    android:id="@+id/pName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_background"
+                    android:elevation="4dp"
                     android:gravity="left"
                     android:padding="14dp"
                     android:text="@string/tutte_le_canzoni"
                     android:textColor="@color/primary_text"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:elevation="4dp"/>
+                    android:textStyle="bold" />
 
                 <!-- Additional playlist items would go here -->
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Mini Player -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/miniPlayer"
         android:layout_width="match_parent"

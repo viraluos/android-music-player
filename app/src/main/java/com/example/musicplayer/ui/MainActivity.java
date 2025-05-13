@@ -3,6 +3,7 @@ package com.example.musicplayer.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,13 +16,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Trova il container della playlist
         LinearLayout playlistContainer = findViewById(R.id.playlist_container);
 
-        // Imposta il click listener per "Tutte le canzoni"
         playlistContainer.setOnClickListener(v -> {
-            // Avvia l'activity della lista canzoni
-            startActivity(new Intent(this, SongListActivity.class));
+
+            Intent SongListActivity = new Intent(this, SongListActivity.class);
+
+            TextView tv = findViewById(R.id.pName);
+            String get_text = tv.getText().toString();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("playlistNameBundle", get_text);
+
+            SongListActivity.putExtras(bundle);
+            startActivity(SongListActivity);
+
         });
     }
 }

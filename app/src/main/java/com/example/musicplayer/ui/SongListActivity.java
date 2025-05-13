@@ -31,6 +31,7 @@ public class SongListActivity extends AppCompatActivity {
 
     private RecyclerView songsRecyclerView;
     private TextView errorTextView;
+    private TextView playlistNameText;
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
 
@@ -39,10 +40,15 @@ public class SongListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
-        songsRecyclerView = findViewById(R.id.songs_container);
+        songsRecyclerView = findViewById(R.id.songsContainer);
         errorTextView = findViewById(R.id.errorText);
+        playlistNameText = findViewById(R.id.playlistName);
 
-        // Setup RecyclerView
+        Bundle bundle = getIntent().getExtras();
+        String playlistNameFromMainActivity = bundle.getString("playlistNameBundle");
+
+        playlistNameText.setText(playlistNameFromMainActivity);
+
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         songAdapter = new SongAdapter(songList);
         songsRecyclerView.setAdapter(songAdapter);

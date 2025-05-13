@@ -14,4 +14,7 @@
 
     <!-- Accent colors -->
     <color name="accent_color">#BB86FC</color>
+
+    <color name="colore_progress">#FF4081</color>
+    <color name="colore_thumb">#3F51B5</color>
 </resources>

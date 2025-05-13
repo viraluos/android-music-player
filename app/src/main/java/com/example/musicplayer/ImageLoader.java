@@ -113,12 +113,11 @@ public class ImageLoader {
             connection.connect();
 
             int responseCode = connection.getResponseCode();
-            String contentType = connection.getContentType();
-            long contentLength = connection.getContentLengthLong();
-
-            Log.e("IMAGE_CONNECTION", "Response Code: " + responseCode);
-            Log.e("IMAGE_CONNECTION", "Content Type: " + contentType);
-            Log.e("IMAGE_CONNECTION", "Content Length: " + contentLength);
+            //String contentType = connection.getContentType();
+            //long contentLength = connection.getContentLengthLong();
+            //Log.e("IMAGE_CONNECTION", "Response Code: " + responseCode);
+            //Log.e("IMAGE_CONNECTION", "Content Type: " + contentType);
+            //Log.e("IMAGE_CONNECTION", "Content Length: " + contentLength);
 
             if (responseCode >= 400) {
                 InputStream errorStream = connection.getErrorStream();

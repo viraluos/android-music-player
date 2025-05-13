@@ -10,6 +10,7 @@
 
     <!-- Header with playlist info -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
@@ -24,16 +25,16 @@
                 android:id="@+id/playlistCover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/album_art"
                 android:background="@color/card_background"
-                tools:src="@tools:sample/backgrounds/scenic"/>
+                android:contentDescription="@string/album_art"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/backgrounds/scenic" />
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/card_background"
                 android:alpha="0.8"
+                android:background="@color/card_background"
                 app:layout_collapseMode="pin">
 
                 <TextView

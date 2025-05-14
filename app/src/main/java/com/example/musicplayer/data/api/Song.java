@@ -20,6 +20,7 @@ public class Song {
 
     @SerializedName("duration")
     public String duration;
+    public static Song currentSong;
 
     public String getId() { return id; }
 
@@ -48,5 +49,9 @@ public class Song {
     public String getDuration() { return duration; }
 
     public void setDuration(String duration) { this.duration = duration; }
+
+    public static Song getCurrentSong(){ return currentSong; }
+
+    public static void setCurrentSong(Song currentSong){ Song.currentSong = currentSong; }
 
 }

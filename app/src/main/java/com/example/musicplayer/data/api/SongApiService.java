@@ -5,6 +5,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface SongApiService {
-    @GET("musxfy/api/songs.php") // Endpoint relativo alla BASE_URL
+    @GET("musxfy/api/songs.php")
     Call<List<Song>> getAllSongs();
 }

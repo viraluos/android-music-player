@@ -1,8 +1,12 @@
 package com.example.musicplayer.ui;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.ImageLoader;
+import com.example.musicplayer.MiniPlayerHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.ApiClient;
 import com.example.musicplayer.data.api.SongApiService;
@@ -30,6 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.musicplayer.MiniPlayerHelper;
+
 public class SongListActivity extends AppCompatActivity {
 
     private RecyclerView songsRecyclerView;
@@ -37,13 +44,27 @@ public class SongListActivity extends AppCompatActivity {
     private TextView playlistNameText;
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
-
-    private MediaPlayer mp;
+    private MiniPlayerHelper mph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
+
+        mph = MiniPlayerHelper.getInstance(this);
+        mph.setListener(new MiniPlayerHelper.MusicPlayerListener() {
+            @Override
+            public void onServiceConnected() {
+                updateMiniPlayer();
+            }
+
+            @Override
+            public void onServiceDisconnected() {
+// se necessario
+            }
+        });
+
+        mph.bindService(this);
 
         songsRecyclerView = findViewById(R.id.songsContainer);
         errorTextView = findViewById(R.id.errorText);
@@ -54,13 +75,29 @@ public class SongListActivity extends AppCompatActivity {
 
         playlistNameText.setText(playlistNameFromMainActivity);
 
-        mp = new MediaPlayer();
-
         songsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         songAdapter = new SongAdapter(songList);
         songsRecyclerView.setAdapter(songAdapter);
 
         loadSongs();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mph.getIsBound()) mph.bindService(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mph.unbindService(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mph.unbindService(this);
     }
 
     private void loadSongs() {
@@ -122,18 +159,19 @@ public class SongListActivity extends AppCompatActivity {
         songsRecyclerView.setVisibility(View.GONE);
     }
 
-    public void updateMiniPlayer(Song song) {
-        TextView title = findViewById(R.id.song_title);
-        TextView artist = findViewById(R.id.song_artist);
-        ImageView cover = findViewById(R.id.song_cover);
+    private void updateMiniPlayer() {
+        Song currentSong = mph.getCurrentSong();
+        if (currentSong != null) {
+            TextView title = findViewById(R.id.song_title);
+            TextView artist = findViewById(R.id.song_artist);
+            ImageView cover = findViewById(R.id.song_cover);
+            ImageView play_pause = findViewById(R.id.btn_play_pause);
 
-        title.setText(song.getTitle());
-        artist.setText(song.getAuthor());
-        String imageUrl = song.getImage();
-        if (imageUrl != null && !imageUrl.isEmpty()) ImageLoader.loadImage(this, imageUrl, cover);
-        else cover.setImageResource(R.drawable.default_image);
+            mph.updateMiniPlayerUI(currentSong, title, artist, cover, play_pause);
 
-        findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
+            mph.setupMiniPlayerControls(findViewById(R.id.miniPlayer));
+            findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
+        }
     }
 
     // Song Adapter class
@@ -187,27 +225,10 @@ public class SongListActivity extends AppCompatActivity {
                             "Avvio riproduzione: " + song.getTitle(),
                             Toast.LENGTH_SHORT).show();
 
-                    updateMiniPlayer(song);
-
-                    try {
-                        if (mp.isPlaying()) {
-                            mp.stop();
-                        }
-
-                        mp.reset();
-                        mp.setDataSource(song.getSongPath());
-                        mp.setOnPreparedListener(MediaPlayer::start);
-                        mp.setOnErrorListener((mp, what, extra) -> {
-                            Toast.makeText(SongListActivity.this,
-                                    "Errore durante la riproduzione", Toast.LENGTH_SHORT).show();
-                            return true;
-                        });
-                        mp.prepareAsync();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(SongListActivity.this,
-                                "Errore caricamento audio", Toast.LENGTH_SHORT).show();
-                    }
+                    Song.setCurrentSong(song);
+                    mph.playSong();
+                    updateMiniPlayer();
+                    //else Toast.makeText(SongListActivity.this, "Servizio non disponibile", Toast.LENGTH_SHORT).show();
 
                 });
             }

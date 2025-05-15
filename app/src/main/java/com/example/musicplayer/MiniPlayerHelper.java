@@ -4,14 +4,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.provider.ContactsContract;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.view.View;
 
 import com.example.musicplayer.MusicService;
 import com.example.musicplayer.data.api.Song;
+
+import java.util.List;
+import java.util.Locale;
 
 public class MiniPlayerHelper<View> {
     private static MiniPlayerHelper instance;
@@ -21,7 +27,13 @@ public class MiniPlayerHelper<View> {
     private ServiceConnection connection;
     private MusicPlayerListener listener;
 
+    private Handler timeHandler = new Handler();
+    private Runnable timeUpdater;
+    private boolean isUpdatingTime = false;
+
     public boolean getIsBound(){ return isBound; }
+
+    public boolean isPlaying() { return musicService.isPlaying(); }
 
     public interface MusicPlayerListener {
         void onServiceConnected();
@@ -79,6 +91,69 @@ public class MiniPlayerHelper<View> {
         musicService.playSong();
     }
 
+    public void playSong(int currentPosition){ musicService.playSong(currentPosition); }
+
+    public void seekTo(int position) {
+        if (isBound) {
+            musicService.seekTo(position);
+        }
+    }
+
+    public int getCurrentPosition() {
+        return isBound ? musicService.getCurrentPosition() : 0;
+    }
+
+    public int getDuration() {
+        return isBound ? musicService.getDuration() : 0;
+    }
+
+    public void playNext() {
+        if (isBound) {
+            musicService.playNext();
+        }
+    }
+
+    public void playPrevious() {
+        if (isBound) {
+            musicService.playPrevious();
+        }
+    }
+
+    private void updateTimeText(int milliseconds, TextView textView, SeekBar seek) {
+        int seconds = (milliseconds / 1000) % 60;
+        int minutes = (milliseconds / (1000 * 60)) % 60;
+        textView.setText(String.format("%02d:%02d", minutes, seconds));
+
+        seek.setProgress(milliseconds);
+    }
+    public void startUpdatingTime(TextView timeTextView, SeekBar seekBar) {
+        if (isUpdatingTime) return;
+
+        isUpdatingTime = true;
+
+        timeUpdater = new Runnable() {
+            @Override
+            public void run() {
+                if (musicService != null && musicService.isPlaying()) {
+                    int currentPosition = musicService.getCurrentPosition();
+                    updateTimeText(currentPosition, timeTextView, seekBar);
+                    timeHandler.postDelayed(this, 500);
+                }
+            }
+        };
+
+        timeHandler.post(timeUpdater);
+    }
+    public void stopUpdatingTime() {
+        if (isUpdatingTime) {
+            timeHandler.removeCallbacks(timeUpdater);
+            isUpdatingTime = false;
+        }
+    }
+
+    public void clearSongList(){ musicService.clearSongList(); }
+    public void setSongList(List<Song> res){ musicService.setSongList(res); }
+
     public Song getCurrentSong() {
         return isBound ? Song.getCurrentSong() : null;
     }
@@ -94,8 +169,6 @@ public class MiniPlayerHelper<View> {
 
         if (imageUrl != null && !imageUrl.isEmpty()) ImageLoader.loadImage(context, imageUrl, coverView);
         else coverView.setImageResource(R.drawable.default_image);
-
-        updatePlayPauseIcon(play_pause);
     }
 
     public void setupMiniPlayerControls(android.view.View miniPlayerView) {
@@ -106,7 +179,7 @@ public class MiniPlayerHelper<View> {
         });
     }
 
-    private void updatePlayPauseIcon(ImageView playPauseButton) {
+    public void updatePlayPauseIcon(ImageView playPauseButton) {
         playPauseButton.setImageResource( musicService.isPlaying() ? R.drawable.pause : R.drawable.play );
     }
 }

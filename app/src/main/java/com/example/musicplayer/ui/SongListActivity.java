@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,9 +61,7 @@ public class SongListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onServiceDisconnected() {
-// se necessario
-            }
+            public void onServiceDisconnected() {}
         });
 
         mph.bindService(this);
@@ -110,10 +110,16 @@ public class SongListActivity extends AppCompatActivity {
                 hideLoading();
 
                 if (response.isSuccessful() && response.body() != null) {
-                    songList.clear();
-                    songList.addAll(response.body());
-                    songAdapter.notifyDataSetChanged();
 
+                    List<Song> res = response.body();
+
+                    songList.clear();
+                    songList.addAll(res);
+
+                    mph.clearSongList();
+                    mph.setSongList(res);
+
+                    songAdapter.notifyDataSetChanged();
                     if (songList.isEmpty()) {
                         showEmptyMessage();
                     }
@@ -160,7 +166,7 @@ public class SongListActivity extends AppCompatActivity {
     }
 
     private void updateMiniPlayer() {
-        Song currentSong = mph.getCurrentSong();
+        Song currentSong = Song.getCurrentSong();
         if (currentSong != null) {
             TextView title = findViewById(R.id.song_title);
             TextView artist = findViewById(R.id.song_artist);
@@ -225,10 +231,24 @@ public class SongListActivity extends AppCompatActivity {
                             "Avvio riproduzione: " + song.getTitle(),
                             Toast.LENGTH_SHORT).show();
 
+                    android.view.View mpv = findViewById(R.id.miniPlayer);
+
                     Song.setCurrentSong(song);
                     mph.playSong();
                     updateMiniPlayer();
                     //else Toast.makeText(SongListActivity.this, "Servizio non disponibile", Toast.LENGTH_SHORT).show();
+
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+
+                        mph.updatePlayPauseIcon(mpv.findViewById(R.id.btn_play_pause));
+
+                        TextView duration = mpv.findViewById(R.id.seek_end);
+                        duration.setText(Song.getDuration());
+
+                        if (mph.isPlaying()) mph.startUpdatingTime(mpv.findViewById(R.id.seek_start), mpv.findViewById(R.id.seekBar));
+                        else mph.stopUpdatingTime();
+
+                    }, 2500);
 
                 });
             }

@@ -19,7 +19,7 @@ public class Song {
     public String song_path;
 
     @SerializedName("duration")
-    public String duration;
+    public static String duration;
     public static Song currentSong;
 
     public String getId() { return id; }
@@ -46,9 +46,9 @@ public class Song {
     public void setSongPath(String song_path) { this.song_path = song_path; }
 
     // Getter e Setter per duration
-    public String getDuration() { return duration; }
+    public static String getDuration() { return duration; }
 
-    public void setDuration(String duration) { this.duration = duration; }
+    public void setDuration(String duration) { Song.duration = duration; }
 
     public static Song getCurrentSong(){ return currentSong; }
 

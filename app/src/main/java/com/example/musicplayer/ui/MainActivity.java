@@ -25,19 +25,15 @@ public class MainActivity extends AppCompatActivity {
         mph = MiniPlayerHelper.getInstance(this);
         mph.setListener(new MiniPlayerHelper.MusicPlayerListener() {
             @Override
-            public void onServiceConnected() {
-                updateMiniPlayer();
-            }
+            public void onServiceConnected() { updateMiniPlayer(); }
 
             @Override
-            public void onServiceDisconnected() {
-// se necessario
-            }
+            public void onServiceDisconnected() {}
         });
 
-        if (!mph.getIsBound()) updateMiniPlayer();
-
         mph.bindService(this);
+
+        if (!mph.getIsBound()) updateMiniPlayer();
 
         LinearLayout playlistContainer = findViewById(R.id.playlist_container);
 
@@ -58,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMiniPlayer() {
-        Song currentSong = mph.getCurrentSong();
+        Song currentSong = Song.getCurrentSong();
         if (currentSong != null) {
             TextView title = findViewById(R.id.song_title);
             TextView artist = findViewById(R.id.song_artist);
@@ -70,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             mph.setupMiniPlayerControls(findViewById(R.id.miniPlayer));
             findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
         }
+        else findViewById(R.id.miniPlayer).setVisibility(View.GONE);
     }
 
     @Override

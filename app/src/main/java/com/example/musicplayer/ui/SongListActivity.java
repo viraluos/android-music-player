@@ -1,13 +1,8 @@
 package com.example.musicplayer.ui;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,21 +18,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.ImageLoader;
-import com.example.musicplayer.MiniPlayerHelper;
+import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.ApiClient;
 import com.example.musicplayer.data.api.SongApiService;
 import com.example.musicplayer.data.api.Song;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import com.example.musicplayer.MiniPlayerHelper;
 
 public class SongListActivity extends AppCompatActivity {
 
@@ -46,15 +38,15 @@ public class SongListActivity extends AppCompatActivity {
     private TextView playlistNameText;
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
-    private MiniPlayerHelper mph;
+    private PlayerHelper mph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
-        mph = MiniPlayerHelper.getInstance(this);
-        mph.setListener(new MiniPlayerHelper.MusicPlayerListener() {
+        mph = PlayerHelper.getInstance(this);
+        mph.setListener(new PlayerHelper.MusicPlayerListener() {
             @Override
             public void onServiceConnected() {
                 updateMiniPlayer();

@@ -6,21 +6,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.provider.ContactsContract;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.view.View;
 
-import com.example.musicplayer.MusicService;
 import com.example.musicplayer.data.api.Song;
 
 import java.util.List;
-import java.util.Locale;
 
-public class MiniPlayerHelper<View> {
-    private static MiniPlayerHelper instance;
+public class PlayerHelper<View> {
+    private static PlayerHelper instance;
     private MusicService musicService;
     private boolean isBound = false;
     private Context context;
@@ -40,14 +35,14 @@ public class MiniPlayerHelper<View> {
         void onServiceDisconnected();
     }
 
-    private MiniPlayerHelper(Context context) {
+    private PlayerHelper(Context context) {
         this.context = context.getApplicationContext();
         initializeServiceConnection();
     }
 
-    public static synchronized MiniPlayerHelper getInstance(Context context) {
+    public static synchronized PlayerHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new MiniPlayerHelper(context);
+            instance = new PlayerHelper(context);
         }
         return instance;
     }

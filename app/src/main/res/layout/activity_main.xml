@@ -33,6 +33,7 @@
                     android:id="@+id/app_logo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+
                     android:contentDescription="@string/logo"
                     tools:srcCompat="@raw/logo" />
 

@@ -1,6 +1,7 @@
 package com.example.musicplayer.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,21 +10,21 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.musicplayer.MiniPlayerHelper;
+import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.Song;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MiniPlayerHelper mph;
+    private PlayerHelper mph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mph = MiniPlayerHelper.getInstance(this);
-        mph.setListener(new MiniPlayerHelper.MusicPlayerListener() {
+        mph = PlayerHelper.getInstance(this);
+        mph.setListener(new PlayerHelper.MusicPlayerListener() {
             @Override
             public void onServiceConnected() { updateMiniPlayer(); }
 
@@ -34,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
         mph.bindService(this);
 
         if (!mph.getIsBound()) updateMiniPlayer();
+
+        ImageView profilePicture = findViewById(R.id.profile_picture);
+        profilePicture.setOnClickListener(v -> {
+            startActivity(new Intent(this, AccountActivity.class));
+        });
 
         LinearLayout playlistContainer = findViewById(R.id.playlist_container);
 

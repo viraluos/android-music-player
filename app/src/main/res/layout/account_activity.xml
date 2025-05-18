@@ -50,7 +50,7 @@
                     android:contentDescription="@string/profile_picture"
                     android:padding="8dp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_profile" />
+                    app:srcCompat="@drawable/profile" />
 
                 <TextView
                     android:id="@+id/username_text"

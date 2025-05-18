@@ -16,7 +16,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginBottom="32dp"
         android:contentDescription="@string/app_logo"
-        android:src="@drawable/ic_logo"
+        android:src="@raw/logo"
         android:tint="@color/primary_color" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:layout_marginBottom="16dp"
         app:errorEnabled="true"
         app:hintTextColor="@color/white"
-        app:startIconDrawable="@drawable/ic_email"
+        app:startIconDrawable="@drawable/email"
         app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -59,7 +59,7 @@
         app:endIconMode="password_toggle"
         app:errorEnabled="true"
         app:hintTextColor="@color/white"
-        app:startIconDrawable="@drawable/ic_password"
+        app:startIconDrawable="@drawable/password"
         app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText

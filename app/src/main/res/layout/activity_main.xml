@@ -45,7 +45,7 @@
                     android:background="@drawable/circle_background"
                     android:contentDescription="@string/pfp"
                     android:padding="4dp"
-                    app:srcCompat="@raw/pfp" />
+                    app:srcCompat="@drawable/profile" />
             </LinearLayout>
 
             <!-- Playlist Section -->

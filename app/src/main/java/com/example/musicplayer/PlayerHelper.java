@@ -43,6 +43,10 @@ public class PlayerHelper<View> {
         initializeServiceConnection();
     }
 
+    public MusicService getMusicService() {
+        return musicService;
+    }
+
     public static synchronized PlayerHelper getInstance(Context context) {
         if (instance == null) {
             instance = new PlayerHelper(context);
@@ -125,8 +129,10 @@ public class PlayerHelper<View> {
         seek.setProgress(milliseconds);
     }
     public void startUpdatingTime(TextView timeTextView, SeekBar seekBar) {
-        if (isUpdatingTime) return;
-
+        if (isUpdatingTime) {
+            timeHandler.removeCallbacks(timeUpdater);
+            isUpdatingTime = false;
+        }
         isUpdatingTime = true;
 
         timeUpdater = new Runnable() {

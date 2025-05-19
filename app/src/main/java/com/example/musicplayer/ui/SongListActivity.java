@@ -247,7 +247,7 @@ public class SongListActivity extends AppCompatActivity {
             mph.setupMiniPlayerControls(findViewById(R.id.miniPlayer));
 
             // Imposta la durata massima della seekbar
-            // seekBar.setMax(mph.getDuration());
+            seekBar.setMax(mph.getDuration());
 
             // Setup dei controlli della seekbar
             // setupSeekBarControls();
@@ -313,9 +313,18 @@ public class SongListActivity extends AppCompatActivity {
                     mph.playSong();
                     updateMiniPlayer();
 
-                    new Handler(Looper.getMainLooper()).post(() -> {
+                    /*new Handler(Looper.getMainLooper()).post(() -> { // <-- Handler usato qui
                         mph.updatePlayPauseIcon(mpv.findViewById(R.id.btn_play_pause));
-                    });
+
+                        TextView duration = mpv.findViewById(R.id.seek_end);
+                        duration.setText(Song.getDuration());
+
+                        if (mph.isPlaying()) {
+                            mph.startUpdatingTime(mpv.findViewById(R.id.seek_start), mpv.findViewById(R.id.seekBar));
+                        } else {
+                            mph.stopUpdatingTime();
+                        }
+                    });*/
 
                 });
             }

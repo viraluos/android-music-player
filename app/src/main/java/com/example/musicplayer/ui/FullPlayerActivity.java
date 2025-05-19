@@ -1,14 +1,156 @@
 package com.example.musicplayer.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.musicplayer.ImageLoader;
+import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
+import com.example.musicplayer.data.api.Song;
 
 public class FullPlayerActivity extends AppCompatActivity {
+    private PlayerHelper mph;
+    private SeekBar seekBar;
+    private TextView currentTime, totalDuration, songTitle, artist;
+    private ImageView coverArt, playPauseBtn, prevBtn, nextBtn;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_full);
+
+        mph = PlayerHelper.getInstance(this);
+        initializeUI();
+        setupControls();
+        bindService();
+    }
+
+    private void initializeUI() {
+        seekBar = findViewById(R.id.seekBar);
+        currentTime = findViewById(R.id.tempoCanzone);
+        totalDuration = findViewById(R.id.DurataCanzone);
+        songTitle = findViewById(R.id.nomeCanzone);
+        artist = findViewById(R.id.autore);
+        coverArt = findViewById(R.id.songPic);
+        playPauseBtn = findViewById(R.id.pause);
+        prevBtn = findViewById(R.id.bw);
+        nextBtn = findViewById(R.id.fw);
+
+        // Back button
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+    }
+
+    private void bindService() {
+        mph.setListener(new PlayerHelper.MusicPlayerListener() {
+            @Override
+            public void onServiceConnected() {
+                updatePlayerUI();
+                startUpdatingProgress();
+            }
+
+            @Override
+            public void onServiceDisconnected() {}
+        });
+        mph.bindService(this);
+    }
+
+    private void updatePlayerUI() {
+        Song currentSong = mph.getCurrentSong();
+        if(currentSong != null) {
+            songTitle.setText(currentSong.getTitle());
+            artist.setText(currentSong.getAuthor());
+            totalDuration.setText(Song.getDuration());
+
+            if(currentSong.getImage() != null && !currentSong.getImage().isEmpty()) {
+                ImageLoader.loadImage(this, currentSong.getImage(), coverArt);
+            } else {
+                coverArt.setImageResource(R.drawable.default_image);
+            }
+
+            seekBar.setMax(mph.getDuration());
+            mph.updatePlayPauseIcon(playPauseBtn);
+        }
+    }
+
+    private void setupControls() {
+        // SeekBar controls
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser) {
+                    currentTime.setText(formatTime(progress));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mph.stopUpdatingTime();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mph.seekTo(seekBar.getProgress());
+                if(mph.isPlaying()) {
+                    startUpdatingProgress();
+                }
+            }
+        });
+
+        // Play/Pause button
+        playPauseBtn.setOnClickListener(v -> {
+            mph.getMusicService().togglePlayPause();
+            mph.updatePlayPauseIcon(playPauseBtn);
+            if(mph.isPlaying()) startUpdatingProgress();
+        });
+
+        // Previous button
+        prevBtn.setOnClickListener(v -> {
+            mph.playPrevious();
+            new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
+        });
+
+        // Next button
+        nextBtn.setOnClickListener(v -> {
+            mph.playNext();
+            new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
+        });
+    }
+
+    private void startUpdatingProgress() {
+        mph.startUpdatingTime(currentTime, seekBar);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if(mph.isPlaying()) {
+                seekBar.setMax(mph.getDuration());
+                totalDuration.setText(formatTime(mph.getDuration()));
+            }
+        });
+    }
+
+    private String formatTime(int milliseconds) {
+        int minutes = (milliseconds / 1000) / 60;
+        int seconds = (milliseconds / 1000) % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mph != null && mph.getIsBound()) {
+            updatePlayerUI();
+            if(mph.isPlaying()) startUpdatingProgress();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mph.unbindService(this);
     }
 }

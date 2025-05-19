@@ -38,6 +38,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playSong() {
         try {
             currentSong = Song.getCurrentSong();
+            currentPosition = songList.indexOf(currentSong); // AGGIUNGI QUESTA RIGA
             if (mediaPlayer != null) {
                 mediaPlayer.release();
             }

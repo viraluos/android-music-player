@@ -62,4 +62,8 @@ dependencies {
 
     implementation("com.github.bumptech.glide:okhttp3-integration:4.15.1")
 
+    // notifiche
+
+    implementation("androidx.media:media:1.7.0")
+
 }

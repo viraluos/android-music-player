@@ -60,7 +60,7 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        String token = Auth.getToken(this);
+        String token = Auth.getToken(getApplicationContext());
         if (token == null) return;
 
         AuthApiService api = ApiClient.getClient(this).create(AuthApiService.class);

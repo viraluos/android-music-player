@@ -115,6 +115,4 @@
 
     </LinearLayout>
 
-    <include layout="@layout/activity_player_mini" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

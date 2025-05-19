@@ -71,7 +71,7 @@
                     tools:text="user@example.com" />
             </LinearLayout>
 
-            <!-- Opzioni account -->
+            <!-- opzioni account?
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                         app:title="@string/logout" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
+-->
             <Button
                 android:id="@+id/logout_button"
                 android:layout_width="wrap_content"

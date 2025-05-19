@@ -91,7 +91,7 @@ public class FullPlayerActivity extends AppCompatActivity {
     }
 
     private int formatStringDuration(String duration){
-        int formattedDuration;
+        int formattedDuration = 0;
 
         try {
             String[] parts = duration.split(":");

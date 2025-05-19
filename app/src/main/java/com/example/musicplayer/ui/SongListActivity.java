@@ -201,7 +201,7 @@ public class SongListActivity extends AppCompatActivity {
         songsRecyclerView.setVisibility(View.GONE);
     }
 
-    private void setupSeekBarControls() {
+    /*private void setupSeekBarControls() {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -233,7 +233,7 @@ public class SongListActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void updateMiniPlayer() {
         Song currentSong = Song.getCurrentSong();
@@ -250,7 +250,7 @@ public class SongListActivity extends AppCompatActivity {
             seekBar.setMax(mph.getDuration());
 
             // Setup dei controlli della seekbar
-            setupSeekBarControls();
+            // setupSeekBarControls();
 
             findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
         }
@@ -313,7 +313,7 @@ public class SongListActivity extends AppCompatActivity {
                     mph.playSong();
                     updateMiniPlayer();
 
-                    new Handler(Looper.getMainLooper()).post(() -> { // <-- Handler usato qui
+                    /*new Handler(Looper.getMainLooper()).post(() -> { // <-- Handler usato qui
                         mph.updatePlayPauseIcon(mpv.findViewById(R.id.btn_play_pause));
 
                         TextView duration = mpv.findViewById(R.id.seek_end);
@@ -324,7 +324,7 @@ public class SongListActivity extends AppCompatActivity {
                         } else {
                             mph.stopUpdatingTime();
                         }
-                    });
+                    });*/
 
                 });
             }

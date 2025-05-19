@@ -165,6 +165,17 @@ public class PlayerHelper<View> {
         artistView.setText(song.getAuthor());
         String imageUrl = song.getImage();
 
+        timeUpdater = new Runnable() {
+            @Override
+            public void run() {
+                if (musicService != null && musicService.isPlaying()) {
+                    updatePlayPauseIcon(play_pause);
+                    timeHandler.postDelayed(this, 2500);
+                }
+            }
+        };
+
+
         if (imageUrl != null && !imageUrl.isEmpty()) ImageLoader.loadImage(context, imageUrl, coverView);
         else coverView.setImageResource(R.drawable.default_image);
     }
@@ -175,11 +186,11 @@ public class PlayerHelper<View> {
             musicService.togglePlayPause();
             updatePlayPauseIcon(playPauseButton);
         });
-/*
+
         miniPlayerView.setOnClickListener(v -> {
             Intent intent = new Intent(miniPlayerView.getContext(), FullPlayerActivity.class);
             startActivity(miniPlayerView.getContext(), intent, null);
-        });*/
+        });
     }
 
     public void updatePlayPauseIcon(ImageView playPauseButton) {

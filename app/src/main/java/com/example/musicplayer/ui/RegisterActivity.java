@@ -32,12 +32,12 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register); // Assicurati che il file XML si chiami così
+        setContentView(R.layout.activity_register);
 
         usernameInput = findViewById(R.id.username_input);
         emailInput = findViewById(R.id.email_input);
         passwordInput = findViewById(R.id.password_input);
-        registerButton = findViewById(R.id.login_button); // sì, si chiama login_button, lo so 😅
+        registerButton = findViewById(R.id.login_button);
         alreadyHaveAccount = findViewById(R.id.register_text);
 
         apiService = ApiClient.getClient(getApplicationContext()).create(AuthApiService.class);

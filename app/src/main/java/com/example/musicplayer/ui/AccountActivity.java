@@ -15,7 +15,6 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Verifica aggiuntiva (doppio controllo)
         if (!Auth.isUserLoggedIn(this)) {
             redirectToLogin();
             return;
@@ -29,14 +28,16 @@ public class AccountActivity extends AppCompatActivity {
     private void redirectToLogin() {
         startActivity(new Intent(this, LoginActivity.class)
                 .putExtra("redirect_target", "account"));
-        finish(); // Chiudi questa activity
+        finish();
     }
 
     private void setupLogoutButton() {
         findViewById(R.id.logout_button).setOnClickListener(v -> {
             Auth.logout(this);
             Toast.makeText(this, R.string.logout_success, Toast.LENGTH_SHORT).show();
-            finish(); // Chiudi AccountActivity dopo il logout
+
+            redirectToLogin();
+            finish();
         });
     }
 }

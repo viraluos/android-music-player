@@ -228,7 +228,6 @@ public class SongListActivity extends AppCompatActivity {
                     Song.setCurrentSong(song);
                     mph.playSong();
                     updateMiniPlayer();
-                    //else Toast.makeText(SongListActivity.this, "Servizio non disponibile", Toast.LENGTH_SHORT).show();
 
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
 

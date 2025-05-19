@@ -5,7 +5,7 @@ public class AuthResponse {
     public String token;
     public String message;
 
-    public boolean isSuccess() {
+    public boolean isSuccessful() {
         return success;
     }
     public String getMessage() {

@@ -1,9 +1,7 @@
 package com.example.musicplayer.ui;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.musicplayer.R;
 
 public class FullPlayerActivity extends AppCompatActivity {

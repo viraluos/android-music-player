@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
+import com.example.musicplayer.data.Auth;
 import com.example.musicplayer.data.api.Song;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView profilePicture = findViewById(R.id.profile_picture);
         profilePicture.setOnClickListener(v -> {
-            startActivity(new Intent(this, AccountActivity.class));
+            if (Auth.isUserLoggedIn(this)) {
+                startActivity(new Intent(this, AccountActivity.class));
+            }
+            else {
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                loginIntent.putExtra("redirect_target", "account");
+                startActivity(loginIntent);
+
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
         });
 
         LinearLayout playlistContainer = findViewById(R.id.playlist_container);

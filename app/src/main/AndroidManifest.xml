@@ -30,6 +30,7 @@
         <activity android:name=".ui.AccountActivity" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.FullPlayerActivity" />
     </application>
 
 </manifest>

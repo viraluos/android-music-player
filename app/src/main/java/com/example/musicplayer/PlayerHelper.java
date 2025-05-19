@@ -1,16 +1,21 @@
 package com.example.musicplayer;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.musicplayer.data.api.Song;
+import com.example.musicplayer.ui.FullPlayerActivity;
 
 import java.util.List;
 
@@ -171,6 +176,11 @@ public class PlayerHelper<View> {
         playPauseButton.setOnClickListener(v -> {
             musicService.togglePlayPause();
             updatePlayPauseIcon(playPauseButton);
+        });
+
+        miniPlayerView.setOnClickListener(v -> {
+            Intent intent = new Intent(miniPlayerView.getContext(), FullPlayerActivity.class);
+            startActivity(miniPlayerView.getContext(), intent, null);
         });
     }
 

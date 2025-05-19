@@ -19,7 +19,7 @@ public class ApiClient {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://viraluos.com/")
+                    .baseUrl("https://viraluos.com/musxfy/api/android_app/")
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

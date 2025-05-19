@@ -1,140 +1,102 @@
 package com.example.musicplayer.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicplayer.R;
-import com.example.musicplayer.Auth;
-import com.example.musicplayer.databinding.LoginActivityBinding;
-import com.google.android.material.textfield.TextInputLayout;
+import com.example.musicplayer.data.api.AuthApiService;
+import com.example.musicplayer.data.api.AuthLoginRequest;
+import com.example.musicplayer.data.api.AuthResponse;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginActivityBinding binding;
+    private TextInputEditText emailInput, passwordInput;
+    private MaterialButton loginButton;
+    private TextView registerText;
+
+    private static final String BASE_URL = "https://yourdomain.com/api/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = LoginActivityBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_login);
 
-        setupLoginButton();
-        setupRegisterText();
-    }
+        emailInput = findViewById(R.id.email_input);
+        passwordInput = findViewById(R.id.password_input);
+        loginButton = findViewById(R.id.login_button);
+        registerText = findViewById(R.id.register_text);
 
-    private void setupLoginButton() {
-        binding.loginButton.setOnClickListener(v -> attemptLogin());
-    }
-
-    private void attemptLogin() {
-        // Reset errors
-        binding.emailLayout.setError(null);
-        binding.passwordLayout.setError(null);
-
-        String email = binding.emailInput.getText().toString().trim();
-        String password = binding.passwordInput.getText().toString().trim();
-
-        if (TextUtils.isEmpty(email)) {
-            binding.emailLayout.setError(getString(R.string.email_required));
-            return;
-        }
-
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.emailLayout.setError(getString(R.string.invalid_email));
-            return;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            binding.passwordLayout.setError(getString(R.string.password_required));
-            return;
-        }
-
-        if (password.length() < 6) {
-            binding.passwordLayout.setError(getString(R.string.password_too_short));
-            return;
-        }
-
-        // Simulazione login (sostituisci con la tua logica reale)
-        performLogin(email, password);
-    }
-
-    private void performLogin(String email, String password) {
-        binding.loginButton.setEnabled(false);
-        binding.loginButton.setText(R.string.loading);
-
-        AuthApiService authApi = ApiClient.getClient(this).create(AuthApiService.class);
-        Call<LoginResponse> call = authApi.login(email, password);
-
-        call.enqueue(new retrofit2.Callback<LoginResponse>() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<LoginResponse> call, retrofit2.Response<LoginResponse> response) {
-                binding.loginButton.setEnabled(true);
-                binding.loginButton.setText(R.string.login);
+            public void onClick(View v) {
+                loginUser();
+            }
+        });
 
-                if (response.isSuccessful() && response.body() != null) {
-                    LoginResponse loginResponse = response.body();
-                    if (loginResponse.success) {
-                        Auth.setLoggedIn(LoginActivity.this, loginResponse.token);
-                        onLoginSuccess();
-                    } else {
-                        onLoginFailed(loginResponse.message != null ? loginResponse.message : getString(R.string.login_error));
-                    }
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Vai all'activity di registrazione se ce l'hai
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+    }
+
+    private void loginUser() {
+        String email = emailInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Inserisci email e password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        AuthApiService apiService = retrofit.create(AuthApiService.class);
+
+        AuthLoginRequest request = new AuthLoginRequest(email, password);
+
+        apiService.login(request).enqueue(new Callback<AuthResponse>() {
+            @Override
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().success) {
+                    saveToken(response.body().token);
+                    Toast.makeText(LoginActivity.this, "Login effettuato!", Toast.LENGTH_SHORT).show();
+                    // Vai all'activity principale dell'app
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 } else {
-                    onLoginFailed(getString(R.string.login_error));
+                    Toast.makeText(LoginActivity.this, "Credenziali errate o server offline", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                binding.loginButton.setEnabled(true);
-                binding.loginButton.setText(R.string.login);
-                onLoginFailed("Errore di rete: " + t.getLocalizedMessage());
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Errore di rete: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private boolean isValidCredentials(String email, String password) {
-        // Mock: accetta qualsiasi password > 5 caratteri per email valida
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.length() > 5;
-    }
-
-    private void onLoginSuccess() {
-        Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
-
-        // Gestione redirect dopo login
-        if (getIntent().hasExtra("redirect_target")) {
-            String target = getIntent().getStringExtra("redirect_target");
-            if ("account".equals(target)) {
-                startActivity(new Intent(this, AccountActivity.class));
-            }
-        }
-        finish(); // Chiudi LoginActivity
-    }
-
-    private void onLoginFailed(String error) {
-        binding.passwordLayout.setError(error);
-        binding.passwordInput.requestFocus();
-        binding.loginButton.setEnabled(true);
-        binding.loginButton.setText(R.string.login);
-    }
-
-    private void setupRegisterText() {
-        binding.registerText.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegisterActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
+    private void saveToken(String token) {
+        SharedPreferences prefs = getSharedPreferences("auth", MODE_PRIVATE);
+        prefs.edit().putString("token", token).apply();
     }
 }

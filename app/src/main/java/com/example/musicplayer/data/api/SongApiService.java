@@ -5,7 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface SongApiService {
-    @GET("musxfy/api/songs.php")
+    @GET("songs.php")
     Call<List<Song>> getAllSongs();
 }
 

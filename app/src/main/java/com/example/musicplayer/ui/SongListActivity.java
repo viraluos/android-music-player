@@ -184,7 +184,7 @@ public class SongListActivity extends AppCompatActivity {
         @Override
         public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.block_song, parent, false);
+                    .inflate(R.layout.activity_block_song, parent, false);
             return new SongViewHolder(view);
         }
 

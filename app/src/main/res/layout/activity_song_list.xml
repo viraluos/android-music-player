@@ -61,10 +61,10 @@
         android:paddingTop="8dp"
         android:paddingBottom="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/block_song"/>
+        tools:listitem="@layout/activity_block_song"/>
 
     <!-- Mini Player -->
-    <include layout="@layout/mini_player" />
+    <include layout="@layout/activity_player_mini" />
 
     <TextView
         android:id="@+id/errorText"

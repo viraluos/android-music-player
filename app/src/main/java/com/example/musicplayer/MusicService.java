@@ -88,6 +88,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.prepareAsync();
             togglePlayPause();
+            currentPosition = position;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -172,8 +173,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : lastKnownPosition;
     }
 
-    public String getDuration() {
-        return mediaPlayer != null ? Song.getDuration() : "00:00";
+    public int getDuration() {
+        return mediaPlayer != null ? mediaPlayer.getDuration() : 0;
     }
 
     public void playNext() {

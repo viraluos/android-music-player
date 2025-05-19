@@ -47,7 +47,7 @@
             android:ellipsize="end"
             android:layout_marginTop="4dp" />
     </LinearLayout>
-
+<!--
     <ImageButton
         android:id="@+id/more_options"
         android:layout_width="50dp"
@@ -56,5 +56,6 @@
         android:background="@color/card_background"
         android:src="@drawable/points"
         android:contentDescription="@string/more_options"/>
+-->
 
 </LinearLayout>

@@ -246,15 +246,28 @@ public class SongListActivity extends AppCompatActivity {
             mph.updateMiniPlayerUI(currentSong, title, artist, cover, play_pause);
             mph.setupMiniPlayerControls(findViewById(R.id.miniPlayer));
 
-            // Imposta la durata massima della seekbar
-            seekBar.setMax(mph.getDuration());
-
-            // Setup dei controlli della seekbar
-            // setupSeekBarControls();
-
             findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
         }
     }
+    private int formatStringDuration(String duration){
+        int formattedDuration = 0;
+
+        try {
+            String[] parts = duration.split(":");
+
+            if (parts.length == 2) {
+                int minutes = Integer.parseInt(parts[0]);
+                int seconds = Integer.parseInt(parts[1]);
+
+                formattedDuration = (minutes * 60 + seconds) * 1000;
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return formattedDuration;
+    }
+
 
     // Song Adapter class
     private class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {

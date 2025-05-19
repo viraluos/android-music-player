@@ -3,6 +3,7 @@ package com.example.musicplayer.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -34,9 +35,9 @@ public class FullPlayerActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        seekBar = findViewById(R.id.seekBar);
+        seekBar = findViewById(R.id.seekBar);/*
         currentTime = findViewById(R.id.tempoCanzone);
-        totalDuration = findViewById(R.id.DurataCanzone);
+        totalDuration = findViewById(R.id.DurataCanzone);*/
         songTitle = findViewById(R.id.nomeCanzone);
         artist = findViewById(R.id.autore);
         coverArt = findViewById(R.id.songPic);
@@ -81,7 +82,7 @@ public class FullPlayerActivity extends AppCompatActivity {
                 ImageLoader.loadImage(this, currentSong.getImage(), coverArt);
             }
 
-            seekBar.setMax(service.getDuration());
+            seekBar.setMax(99999);
             seekBar.setProgress(service.getCurrentPosition());
             totalDuration.setText(service.getDuration());
             currentTime.setText(formatTime(service.getCurrentPosition()));
@@ -159,9 +160,9 @@ public class FullPlayerActivity extends AppCompatActivity {
 
     private void updatePlayerState() {
         if(mph.getMusicService() != null) {
-            seekBar.setMax(mph.getDuration());
+            seekBar.setMax(99999);
             seekBar.setProgress(mph.getCurrentPosition());
-            totalDuration.setText(formatTime(mph.getDuration()));
+            totalDuration.setText(mph.getDuration());
             currentTime.setText(formatTime(mph.getCurrentPosition()));
         }
     }
@@ -170,8 +171,8 @@ public class FullPlayerActivity extends AppCompatActivity {
         mph.startUpdatingTime(currentTime, seekBar);
         new Handler(Looper.getMainLooper()).post(() -> {
             if(mph.isPlaying()) {
-                seekBar.setMax(mph.getDuration());
-                totalDuration.setText(formatTime(mph.getDuration()));
+                //seekBar.setMax();
+                totalDuration.setText(mph.getDuration());
             }
         });
     }

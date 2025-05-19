@@ -105,8 +105,8 @@ public class PlayerHelper<View> {
         return isBound ? musicService.getCurrentPosition() : 0;
     }
 
-    public String getDuration() {
-        return isBound ? musicService.getDuration() : "00:00";
+    public int getDuration() {
+        return isBound ? musicService.getDuration() : 0;
     }
 
     public void playNext() {
@@ -192,11 +192,13 @@ public class PlayerHelper<View> {
             musicService.togglePlayPause();
             updatePlayPauseIcon(playPauseButton);
         });
-
+/*
         miniPlayerView.setOnClickListener(v -> {
             Intent intent = new Intent(miniPlayerView.getContext(), FullPlayerActivity.class);
             startActivity(miniPlayerView.getContext(), intent, null);
+
         });
+*/
     }
 
     public void updatePlayPauseIcon(ImageView playPauseButton) {

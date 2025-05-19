@@ -38,14 +38,15 @@
 
             <TextView
                 android:id="@+id/song_title"
-                android:layout_width="match_parent"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/primary_text"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                tools:text="Song Title" />
+                tools:text="Song Title"
+                />
 
             <TextView
                 android:id="@+id/song_artist"
@@ -99,8 +100,8 @@
             android:id="@+id/seek_start"
             android:layout_width="35dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="117dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="104dp"
+            android:layout_marginBottom="16dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/secondary_text"

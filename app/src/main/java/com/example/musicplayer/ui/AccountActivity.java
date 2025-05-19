@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicplayer.R;
-import com.example.musicplayer.data.Auth;
+import com.example.musicplayer.Auth;
 
 public class AccountActivity extends AppCompatActivity {
 

@@ -1,7 +1,6 @@
 package com.example.musicplayer.ui;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
-import com.example.musicplayer.data.Auth;
+import com.example.musicplayer.Auth;
 import com.example.musicplayer.data.api.Song;
 
 public class MainActivity extends AppCompatActivity {

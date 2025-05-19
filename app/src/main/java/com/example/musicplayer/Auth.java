@@ -1,4 +1,4 @@
-package com.example.musicplayer.data;
+package com.example.musicplayer;
 
 import android.content.Context;
 import android.content.SharedPreferences;

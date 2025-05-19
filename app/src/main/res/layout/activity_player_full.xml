@@ -41,7 +41,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/songPic"
-        app:layout_constraintVertical_bias="0.168" />
+        app:layout_constraintVertical_bias="0.139" />
 
     <TextView
         android:id="@+id/DurataCanzone"
@@ -83,24 +83,23 @@
 
     <TextView
         android:id="@+id/nomeCanzone"
-        android:layout_width="254dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="358dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/days_one"
         android:text="Nome canzone"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="30dp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/songPic" />
 
     <TextView
         android:id="@+id/autore"
-        android:layout_width="254dp"
+        android:layout_width="362dp"
         android:layout_height="33dp"
-        android:layout_marginEnd="84dp"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/days_one"
         android:text="Autore "
@@ -109,14 +108,15 @@
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/bw"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_media_rew" />
@@ -125,8 +125,8 @@
         android:id="@+id/fw"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_media_ff" />
@@ -137,9 +137,10 @@
         android:layout_height="64dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fw"
+        app:layout_constraintHorizontal_bias="0.468"
         app:layout_constraintStart_toEndOf="@+id/bw"
         app:srcCompat="@drawable/pause" />
 

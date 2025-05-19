@@ -72,16 +72,41 @@ public class FullPlayerActivity extends AppCompatActivity {
     private void updatePlayerUI() {
         if (mph.getMusicService() != null) {
             MusicService service = mph.getMusicService();
+            Song currentSong = Song.getCurrentSong();
 
-            // Aggiorna sempre tutti gli elementi
+            if (currentSong != null) {
+                songTitle.setText(currentSong.getTitle());
+                artist.setText(currentSong.getAuthor());
+
+                ImageLoader.loadImage(this, currentSong.getImage(), coverArt);
+            }
+
             seekBar.setMax(service.getDuration());
             seekBar.setProgress(service.getCurrentPosition());
-            totalDuration.setText(formatTime(service.getDuration()));
+            totalDuration.setText(service.getDuration());
             currentTime.setText(formatTime(service.getCurrentPosition()));
 
-            // Aggiorna lo stato play/pause
             mph.updatePlayPauseIcon(playPauseBtn);
         }
+    }
+
+    private int formatStringDuration(String duration){
+        int formattedDuration;
+
+        try {
+            String[] parts = duration.split(":");
+
+            if (parts.length == 2) {
+                int minutes = Integer.parseInt(parts[0]);
+                int seconds = Integer.parseInt(parts[1]);
+
+                formattedDuration = (minutes * 60 + seconds) * 1000;
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return formattedDuration;
     }
 
     private void setupControls() {
@@ -119,13 +144,11 @@ public class FullPlayerActivity extends AppCompatActivity {
             if(mph.isPlaying()) startUpdatingProgress();
         });
 
-        // Previous button
         prevBtn.setOnClickListener(v -> {
             mph.playPrevious();
             new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
         });
 
-        // Next button
         nextBtn.setOnClickListener(v -> {
             mph.playNext();
             new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
@@ -164,7 +187,8 @@ public class FullPlayerActivity extends AppCompatActivity {
         super.onResume();
         updatePlayerState();
         if(mph.isPlaying()) {
-            mph.startUpdatingTime(currentTime, seekBar);
+            startUpdatingProgress();
+            updatePlayerUI();
         }
     }
 

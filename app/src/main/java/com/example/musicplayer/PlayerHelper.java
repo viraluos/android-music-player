@@ -105,8 +105,8 @@ public class PlayerHelper<View> {
         return isBound ? musicService.getCurrentPosition() : 0;
     }
 
-    public int getDuration() {
-        return isBound ? musicService.getDuration() : 0;
+    public String getDuration() {
+        return isBound ? musicService.getDuration() : "00:00";
     }
 
     public void playNext() {

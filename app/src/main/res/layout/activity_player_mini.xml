@@ -95,7 +95,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/pause" />
-
+<!--
         <TextView
             android:id="@+id/seek_start"
             android:layout_width="35dp"
@@ -133,6 +133,7 @@
             android:thumbTint="@color/colore_thumb"
             app:layout_constraintEnd_toStartOf="@+id/btn_play_pause"
             app:layout_constraintTop_toTopOf="parent" />
+        -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

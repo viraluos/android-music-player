@@ -113,12 +113,21 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < songs.size(); i++) {
                         Song song = songs.get(i);
 
+                        LinearLayout ll = findViewById(getResources().getIdentifier(
+                                "boxRandomSong" + (i + 1), "id", getPackageName()
+                        ));
                         TextView titleView = findViewById(getResources().getIdentifier(
                                 "idRandomSong" + (i + 1), "id", getPackageName()
                         ));
                         ImageView imageView = findViewById(getResources().getIdentifier(
                                 "imageRandomSong" + (i + 1), "id", getPackageName()
                         ));
+
+                        ll.setOnClickListener(v -> {
+                            Song.setCurrentSong(song);
+                            mph.playSong();
+                            updateMiniPlayer();
+                        });
 
                         titleView.setText(song.title);
                         Glide.with(MainActivity.this)

@@ -27,6 +27,7 @@ import com.example.musicplayer.data.api.Song;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,7 +76,7 @@ public class SongListActivity extends AppCompatActivity {
         songAdapter = new SongAdapter(songList);
         songsRecyclerView.setAdapter(songAdapter);
 
-        loadSongs();
+        loadSongs(playlistNameFromMainActivity);
     }
 
     @Override
@@ -96,42 +97,81 @@ public class SongListActivity extends AppCompatActivity {
         mph.unbindService(this);
     }
 
-    private void loadSongs() {
+    private void loadSongs(String pname) {
         showLoading();
 
         SongApiService apiService = ApiClient.getClient(getApplicationContext()).create(SongApiService.class);
-        apiService.getAllSongs().enqueue(new Callback<List<Song>>() {
-            @Override
-            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
-                hideLoading();
 
-                if (response.isSuccessful() && response.body() != null) {
+        Log.e("PLAYLIST_NAME", pname);
 
-                    List<Song> res = response.body();
+        if(Objects.equals(pname, "general")) {
+            apiService.getAllSongs().enqueue(new Callback<List<Song>>() {
+                @Override
+                public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
+                    hideLoading();
 
-                    songList.clear();
-                    songList.addAll(res);
+                    if (response.isSuccessful() && response.body() != null) {
 
-                    mph.clearSongList();
-                    mph.setSongList(res);
+                        List<Song> res = response.body();
 
-                    songAdapter.notifyDataSetChanged();
-                    if (songList.isEmpty()) {
-                        showEmptyMessage();
+                        songList.clear();
+                        songList.addAll(res);
+
+                        mph.clearSongList();
+                        mph.setSongList(res);
+
+                        songAdapter.notifyDataSetChanged();
+                        if (songList.isEmpty()) {
+                            showEmptyMessage();
+                        }
+                    } else {
+                        showError("Errore nel caricamento: " + response.code());
+                        Log.e("API_ERROR", "Response error: " + response.errorBody());
                     }
-                } else {
-                    showError("Errore nel caricamento: " + response.code());
-                    Log.e("API_ERROR", "Response error: " + response.errorBody());
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<Song>> call, Throwable t) {
-                hideLoading();
-                showError("Errore di connessione: " + t.getMessage());
-                Log.e("API_ERROR", "Network error: ", t);
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Song>> call, Throwable t) {
+                    hideLoading();
+                    showError("Errore di connessione: " + t.getMessage());
+                    Log.e("API_ERROR", "Network error: ", t);
+                }
+            });
+        }
+        else{
+            apiService.getSongsFromPlaylist(pname).enqueue(new Callback<List<Song>>() {
+                @Override
+                public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
+                    hideLoading();
+
+                    if (response.isSuccessful() && response.body() != null) {
+
+                        List<Song> res = response.body();
+
+                        songList.clear();
+                        songList.addAll(res);
+
+                        mph.clearSongList();
+                        mph.setSongList(res);
+
+                        songAdapter.notifyDataSetChanged();
+                        if (songList.isEmpty()) {
+                            showEmptyMessage();
+                        }
+                    } else {
+                        showError("Errore nel caricamento: " + response.code());
+                        Log.e("API_ERROR", "Response error: " + response.errorBody());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Song>> call, Throwable t) {
+                    hideLoading();
+                    showError("Errore di connessione: " + t.getMessage());
+                    Log.e("API_ERROR", "Network error: ", t);
+                }
+            });
+        }
     }
 
     private void showLoading() {
@@ -148,7 +188,7 @@ public class SongListActivity extends AppCompatActivity {
         errorTextView.setText(message + "\n\nTocca per riprovare");
         errorTextView.setOnClickListener(v -> {
             errorTextView.setVisibility(View.GONE);
-            loadSongs();
+            loadSongs("general");
         });
         errorTextView.setTextColor(Color.RED);
         songsRecyclerView.setVisibility(View.GONE);

@@ -7,6 +7,11 @@ public class Auth {
     private static final String PREFS_NAME = "auth_prefs";
     private static final String KEY_AUTH_TOKEN = "auth_token";
 
+    public static String getToken(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        return prefs.getString("token", null);
+    }
+
     public static boolean isUserLoggedIn(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_AUTH_TOKEN, null) != null;

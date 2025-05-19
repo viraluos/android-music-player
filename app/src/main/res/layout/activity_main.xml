@@ -8,6 +8,7 @@
     android:background="@color/background_color">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -57,7 +58,7 @@
                 android:paddingHorizontal="16dp">
 
                 <TextView
-                    android:id="@+id/pName"
+                    android:id="@+id/general"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_background"
@@ -70,28 +71,92 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:id="@+id/boxRandomSong"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
 
-                    <ImageView
-                        android:id="@+id/imageRandomSong"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/placeholder" />
-
-                    <TextView
-                        android:id="@+id/idRandomSong"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:id="@+id/boxRandomSong1"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/days_one"
-                        android:text="NomeRandomSong"
-                        android:textAlignment="center"
-                        android:textColor="@color/white" />
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageRandomSong1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/placeholder" />
+
+                        <TextView
+                            android:id="@+id/idRandomSong1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/days_one"
+                            android:text="random1"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/boxRandomSong2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp">
+
+                        <ImageView
+                            android:id="@+id/imageRandomSong2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/placeholder" />
+
+                        <TextView
+                            android:id="@+id/idRandomSong2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/days_one"
+                            android:text="random2"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/boxRandomSong3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageRandomSong3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/placeholder" />
+
+                        <TextView
+                            android:id="@+id/idRandomSong3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/days_one"
+                            android:text="random2"
+                            android:textAlignment="center"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/pTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Playlists"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <!-- Additional playlist items would go here -->
             </LinearLayout>
@@ -100,4 +165,5 @@
     </androidx.core.widget.NestedScrollView>
 
     <include layout="@layout/activity_player_mini" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

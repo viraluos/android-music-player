@@ -2,21 +2,36 @@ package com.example.musicplayer.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.Auth;
+import com.example.musicplayer.data.api.ApiClient;
+import com.example.musicplayer.data.api.AuthApiService;
+import com.example.musicplayer.data.api.Playlist;
 import com.example.musicplayer.data.api.Song;
+import com.example.musicplayer.data.api.SongApiService;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private PlayerHelper mph;
+    private SongApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +65,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LinearLayout playlistContainer = findViewById(R.id.playlist_container);
+        TextView tv = findViewById(R.id.general);
 
-        playlistContainer.setOnClickListener(v -> {
+        tv.setOnClickListener(v -> {
 
             Intent SongListActivity = new Intent(this, SongListActivity.class);
 
-            TextView tv = findViewById(R.id.pName);
             String get_text = tv.getText().toString();
 
             Bundle bundle = new Bundle();
-            bundle.putString("playlistNameBundle", get_text);
+            bundle.putString("playlistNameBundle", "general");
 
             SongListActivity.putExtras(bundle);
             startActivity(SongListActivity);
 
         });
+
+        apiService = ApiClient.getClient(getApplicationContext()).create(SongApiService.class);
+
+        fetchRandomSongs();
+        fetchPlaylistsDynamically();
     }
 
     private void updateMiniPlayer() {
@@ -82,6 +101,81 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
         }
         else findViewById(R.id.miniPlayer).setVisibility(View.GONE);
+    }
+
+    private void fetchRandomSongs() {
+        apiService.getRandomSongs().enqueue(new Callback<List<Song>>() {
+            @Override
+            public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
+                if (response.isSuccessful()) {
+                    List<Song> songs = response.body();
+
+                    for (int i = 0; i < songs.size(); i++) {
+                        Song song = songs.get(i);
+
+                        TextView titleView = findViewById(getResources().getIdentifier(
+                                "idRandomSong" + (i + 1), "id", getPackageName()
+                        ));
+                        ImageView imageView = findViewById(getResources().getIdentifier(
+                                "imageRandomSong" + (i + 1), "id", getPackageName()
+                        ));
+
+                        titleView.setText(song.title);
+                        Glide.with(MainActivity.this)
+                                .load(song.image)
+                                .placeholder(R.drawable.placeholder)  // opzionale
+                                .error(R.drawable.error_image)        // opzionale
+                                .into(imageView);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Song>> call, Throwable t) {
+                Log.e("Retrofit", "Errore: " + t.getMessage());
+            }
+        });
+    }
+
+    private void fetchPlaylistsDynamically() {
+        apiService.getPlaylists().enqueue(new Callback<List<Playlist>>() {
+            @Override
+            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+                if (response.isSuccessful()) {
+                    List<Playlist> playlists = response.body();
+                    LinearLayout playlistContainer = findViewById(R.id.playlist_container);
+
+                    for (Playlist playlist : playlists) {
+                        TextView playlistView = new TextView(MainActivity.this);
+                        playlistView.setText(playlist.name);
+                        playlistView.setTextSize(18);
+                        playlistView.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.primary_text));
+                        playlistView.setPadding(14, 14, 14, 14);
+                        playlistView.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.rounded_background));
+
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                        );
+                        layoutParams.setMargins(0, 0, 0, 10);
+                        playlistView.setLayoutParams(layoutParams);
+
+                        playlistView.setOnClickListener(v -> {
+                            Intent intent = new Intent(MainActivity.this, SongListActivity.class);
+                            intent.putExtra("playlistNameBundle", playlist.name);
+                            startActivity(intent);
+                        });
+
+                        playlistContainer.addView(playlistView);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+                Log.e("Retrofit", "Errore: " + t.getMessage());
+            }
+        });
     }
 
     @Override
@@ -102,4 +196,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         mph.unbindService(this);
     }
+
 }

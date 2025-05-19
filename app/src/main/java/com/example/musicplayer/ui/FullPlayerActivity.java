@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicplayer.ImageLoader;
+import com.example.musicplayer.MusicService;
 import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.Song;
@@ -51,8 +52,15 @@ public class FullPlayerActivity extends AppCompatActivity {
         mph.setListener(new PlayerHelper.MusicPlayerListener() {
             @Override
             public void onServiceConnected() {
-                updatePlayerUI();
-                startUpdatingProgress();
+                updatePlayerUI(); // Forza l'aggiornamento iniziale
+                if(mph.isPlaying()) {
+                    startUpdatingProgress();
+                } else {
+                    // Aggiorna manualmente lo stato se in pausa
+                    new Handler().post(() -> {
+                        updatePlayerUI();
+                    });
+                }
             }
 
             @Override
@@ -62,19 +70,16 @@ public class FullPlayerActivity extends AppCompatActivity {
     }
 
     private void updatePlayerUI() {
-        Song currentSong = mph.getCurrentSong();
-        if(currentSong != null) {
-            songTitle.setText(currentSong.getTitle());
-            artist.setText(currentSong.getAuthor());
-            totalDuration.setText(Song.getDuration());
+        if (mph.getMusicService() != null) {
+            MusicService service = mph.getMusicService();
 
-            if(currentSong.getImage() != null && !currentSong.getImage().isEmpty()) {
-                ImageLoader.loadImage(this, currentSong.getImage(), coverArt);
-            } else {
-                coverArt.setImageResource(R.drawable.default_image);
-            }
+            // Aggiorna sempre tutti gli elementi
+            seekBar.setMax(service.getDuration());
+            seekBar.setProgress(service.getCurrentPosition());
+            totalDuration.setText(formatTime(service.getDuration()));
+            currentTime.setText(formatTime(service.getCurrentPosition()));
 
-            seekBar.setMax(mph.getDuration());
+            // Aggiorna lo stato play/pause
             mph.updatePlayPauseIcon(playPauseBtn);
         }
     }
@@ -96,9 +101,13 @@ public class FullPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mph.seekTo(seekBar.getProgress());
-                if(mph.isPlaying()) {
-                    startUpdatingProgress();
+                if(mph.getMusicService() != null) {
+                    mph.seekTo(seekBar.getProgress());
+                    currentTime.setText(formatTime(seekBar.getProgress()));
+
+                    if(mph.isPlaying()) {
+                        mph.startUpdatingTime(currentTime, seekBar);
+                    }
                 }
             }
         });
@@ -121,6 +130,17 @@ public class FullPlayerActivity extends AppCompatActivity {
             mph.playNext();
             new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
         });
+
+        updatePlayerState();
+    }
+
+    private void updatePlayerState() {
+        if(mph.getMusicService() != null) {
+            seekBar.setMax(mph.getDuration());
+            seekBar.setProgress(mph.getCurrentPosition());
+            totalDuration.setText(formatTime(mph.getDuration()));
+            currentTime.setText(formatTime(mph.getCurrentPosition()));
+        }
     }
 
     private void startUpdatingProgress() {
@@ -142,9 +162,9 @@ public class FullPlayerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(mph != null && mph.getIsBound()) {
-            updatePlayerUI();
-            if(mph.isPlaying()) startUpdatingProgress();
+        updatePlayerState();
+        if(mph.isPlaying()) {
+            mph.startUpdatingTime(currentTime, seekBar);
         }
     }
 

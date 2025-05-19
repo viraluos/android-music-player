@@ -21,6 +21,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private int currentPosition = 0;
     private List<Song> songList = new ArrayList<>();
 
+    private int lastKnownPosition = 0;
+
     public class MusicBinder extends Binder {
         public MusicService getService() {
             return MusicService.this;
@@ -106,11 +108,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void seekTo(int position) {
         if (mediaPlayer != null) {
             mediaPlayer.seekTo(position);
+            lastKnownPosition = position;
         }
     }
 
     public int getCurrentPosition() {
-        return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : 0;
+        return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : lastKnownPosition;
     }
 
     public int getDuration() {

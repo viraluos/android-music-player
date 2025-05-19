@@ -16,8 +16,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginBottom="32dp"
         android:contentDescription="@string/app_logo"
-        android:src="@raw/logo"
-        app:tint="@color/primary_color" />
+        android:src="@raw/logo" />
 
     <TextView
         android:layout_width="wrap_content"

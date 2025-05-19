@@ -47,12 +47,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        registerText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Vai all'activity di registrazione se ce l'hai
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
+        registerText.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
     }
 

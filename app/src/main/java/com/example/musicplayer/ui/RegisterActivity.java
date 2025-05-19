@@ -48,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         alreadyHaveAccount.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
         });
     }

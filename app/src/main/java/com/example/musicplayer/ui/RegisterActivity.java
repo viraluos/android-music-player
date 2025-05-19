@@ -1,5 +1,7 @@
 package com.example.musicplayer.ui;
 
+import static com.example.musicplayer.Auth.setLoggedIn;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -71,11 +73,10 @@ public class RegisterActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     String token = response.body().getToken();
 
-                    preferences.edit().putString("token", token).apply();
+                    setLoggedIn(getApplicationContext(), token);
 
                     Toast.makeText(RegisterActivity.this, "Registrazione completata 🎉", Toast.LENGTH_SHORT).show();
 
-                    // Vai alla Home o Login
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class); // o LoginActivity
                     startActivity(intent);
                     finish();

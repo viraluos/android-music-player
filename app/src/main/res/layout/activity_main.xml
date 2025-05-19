@@ -78,15 +78,16 @@
 
                     <LinearLayout
                         android:id="@+id/boxRandomSong1"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/imageRandomSong1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
                             android:src="@drawable/placeholder" />
 
                         <TextView
@@ -101,7 +102,7 @@
 
                     <LinearLayout
                         android:id="@+id/boxRandomSong2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginStart="10dp"
@@ -110,8 +111,9 @@
                         <ImageView
                             android:id="@+id/imageRandomSong2"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
                             android:src="@drawable/placeholder" />
 
                         <TextView
@@ -126,15 +128,16 @@
 
                     <LinearLayout
                         android:id="@+id/boxRandomSong3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/imageRandomSong3"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
                             android:src="@drawable/placeholder" />
 
                         <TextView
@@ -142,7 +145,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/days_one"
-                            android:text="random2"
+                            android:text="random3"
                             android:textAlignment="center"
                             android:textColor="@color/white" />
                     </LinearLayout>
@@ -158,7 +161,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- Additional playlist items would go here -->
             </LinearLayout>
 
         </LinearLayout>

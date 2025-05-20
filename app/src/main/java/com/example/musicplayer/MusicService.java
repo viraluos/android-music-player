@@ -109,14 +109,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void pause() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            updateNotification(false, currentSong);
+            // updateNotification(false, currentSong);
         }
     }
 
     public void resume() {
         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
-            updateNotification(true, currentSong);
+            // updateNotification(true, currentSong);
         }
     }
 

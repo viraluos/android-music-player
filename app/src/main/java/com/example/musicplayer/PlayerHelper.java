@@ -1,7 +1,5 @@
 package com.example.musicplayer;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +11,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.musicplayer.data.api.Song;
-import com.example.musicplayer.ui.FullPlayerActivity;
 
 import java.util.List;
 
@@ -181,7 +178,6 @@ public class PlayerHelper<View> {
             }
         };
 
-
         if (imageUrl != null && !imageUrl.isEmpty()) ImageLoader.loadImage(context, imageUrl, coverView);
         else coverView.setImageResource(R.drawable.default_image);
     }
@@ -192,13 +188,6 @@ public class PlayerHelper<View> {
             musicService.togglePlayPause();
             updatePlayPauseIcon(playPauseButton);
         });
-/*
-        miniPlayerView.setOnClickListener(v -> {
-            Intent intent = new Intent(miniPlayerView.getContext(), FullPlayerActivity.class);
-            startActivity(miniPlayerView.getContext(), intent, null);
-
-        });
-*/
     }
 
     public void updatePlayPauseIcon(ImageView playPauseButton) {

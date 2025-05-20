@@ -40,13 +40,15 @@
 
                 <ImageView
                     android:id="@+id/profile_picture"
-                    android:layout_width="37dp"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="end"
                     android:background="@drawable/circle_background"
                     android:contentDescription="@string/pfp"
                     android:padding="4dp"
-                    app:srcCompat="@drawable/profile" />
+                    app:srcCompat="@drawable/profile"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"/>
             </LinearLayout>
 
             <!-- Playlist Section -->

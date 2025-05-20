@@ -42,15 +42,12 @@ public class SongListActivity extends AppCompatActivity {
     private List<Song> songList = new ArrayList<>();
     private PlayerHelper mph;
 
-    private SeekBar seekBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
 
         mph = PlayerHelper.getInstance(this);
-        seekBar = findViewById(R.id.seekBar);
         mph.setListener(new PlayerHelper.MusicPlayerListener() {
             @Override
             public void onServiceConnected() {
@@ -201,40 +198,6 @@ public class SongListActivity extends AppCompatActivity {
         songsRecyclerView.setVisibility(View.GONE);
     }
 
-    /*private void setupSeekBarControls() {
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && mph != null) {
-                    // Aggiorna il tempo corrente durante lo spostamento
-                    TextView currentTime = findViewById(R.id.seek_start);
-                    int minutes = (progress / 1000) / 60;
-                    int seconds = (progress / 1000) % 60;
-                    currentTime.setText(String.format("%02d:%02d", minutes, seconds));
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // Ferma gli aggiornamenti automatici durante l'interazione utente
-                mph.stopUpdatingTime();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if (mph != null && mph.getIsBound()) {
-                    // Cambia la posizione della canzone quando l'utente rilascia la seekbar
-                    mph.seekTo(seekBar.getProgress());
-
-                    // Riavvia gli aggiornamenti
-                    if (mph.isPlaying()) {
-                        mph.startUpdatingTime(findViewById(R.id.seek_start), seekBar);
-                    }
-                }
-            }
-        });
-    }*/
-
     private void updateMiniPlayer() {
         Song currentSong = Song.getCurrentSong();
         if (currentSong != null) {
@@ -249,25 +212,6 @@ public class SongListActivity extends AppCompatActivity {
             findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
         }
     }
-    private int formatStringDuration(String duration){
-        int formattedDuration = 0;
-
-        try {
-            String[] parts = duration.split(":");
-
-            if (parts.length == 2) {
-                int minutes = Integer.parseInt(parts[0]);
-                int seconds = Integer.parseInt(parts[1]);
-
-                formattedDuration = (minutes * 60 + seconds) * 1000;
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        return formattedDuration;
-    }
-
 
     // Song Adapter class
     private class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
@@ -325,19 +269,6 @@ public class SongListActivity extends AppCompatActivity {
                     Song.setCurrentSong(song);
                     mph.playSong();
                     updateMiniPlayer();
-
-                    /*new Handler(Looper.getMainLooper()).post(() -> { // <-- Handler usato qui
-                        mph.updatePlayPauseIcon(mpv.findViewById(R.id.btn_play_pause));
-
-                        TextView duration = mpv.findViewById(R.id.seek_end);
-                        duration.setText(Song.getDuration());
-
-                        if (mph.isPlaying()) {
-                            mph.startUpdatingTime(mpv.findViewById(R.id.seek_start), mpv.findViewById(R.id.seekBar));
-                        } else {
-                            mph.stopUpdatingTime();
-                        }
-                    });*/
 
                 });
             }

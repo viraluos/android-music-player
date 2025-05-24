@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import com.example.musicplayer.data.api.Song;
@@ -75,23 +76,40 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             mediaPlayer.setDataSource(currentSong.getSongPath());
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.prepareAsync();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void playSong(int position) {
-        if (mediaPlayer != null) mediaPlayer.release();
+        if (songList == null || songList.isEmpty()) {
+            Log.e("MusicService", "Lista vuota o null");
+            return;
+        }
 
-        isPrepared = false;
+        if (position < 0 || position >= songList.size()) {
+            Log.e("MusicService", "Posizione non valida: " + position);
+            return;
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        Log.e("Indice canzone", String.valueOf(position));
+        currentPosition = position;
+        currentSong = songList.get(position);
+        Song.setCurrentSong(currentSong);
 
         try {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(songList.get(position).getSongPath());
             mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.setOnCompletionListener(mp -> playNext());
             mediaPlayer.prepareAsync();
-            togglePlayPause();
-            currentPosition = position;
+            isPrepared = false;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -205,12 +223,16 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playNext() {
         if(songList == null || songList.isEmpty()) return;
 
+        if (songList.size() == 1) return;
+
         currentPosition = (currentPosition + 1) % songList.size();
         playSong(currentPosition);
     }
 
     public void playPrevious() {
         if(songList == null || songList.isEmpty()) return;
+
+        if (songList.size() == 1) return;
 
         currentPosition--;
         if(currentPosition < 0) currentPosition = songList.size() - 1;

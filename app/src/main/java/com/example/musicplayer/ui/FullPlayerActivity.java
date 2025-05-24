@@ -54,12 +54,10 @@ public class FullPlayerActivity extends AppCompatActivity {
             @Override
             public void onServiceConnected() {
                 mph.setOnMediaPreparedListener(() -> runOnUiThread(() -> {
-                    updatePlayerUI(); // Forza l'aggiornamento iniziale
+                    updatePlayerUI();
                     startUpdatingProgress();
                 }));
-                if(mph.isPlaying()) {
-                    updatePlayerUI();
-                }
+                updatePlayerUI();
             }
 
             @Override
@@ -149,12 +147,12 @@ public class FullPlayerActivity extends AppCompatActivity {
 
         prevBtn.setOnClickListener(v -> {
             mph.playPrevious();
-            new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
+            updatePlayerUI();
         });
 
         nextBtn.setOnClickListener(v -> {
             mph.playNext();
-            new Handler(Looper.getMainLooper()).postDelayed(this::updatePlayerUI, 100);
+            updatePlayerUI();
         });
 
         updatePlayerState();

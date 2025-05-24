@@ -1,5 +1,7 @@
 package com.example.musicplayer.data.api;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Song {
@@ -52,6 +54,9 @@ public class Song {
 
     public static Song getCurrentSong(){ return currentSong; }
 
-    public static void setCurrentSong(Song currentSong){ Song.currentSong = currentSong; }
+    public static void setCurrentSong(Song currentSong){
+        Song.currentSong = currentSong;
+        Log.d("Song", "Canzone impostata: " + (currentSong != null ? currentSong.getTitle() : "null"));
+    }
 
 }

@@ -101,12 +101,12 @@ public class PlayerHelper<View> {
         }
     }
 
-    public int getCurrentPosition() {
-        return isBound ? musicService.getCurrentPosition() : 0;
+    public int getDuration() {
+        return (isBound && musicService != null) ? musicService.getDuration() : 0;
     }
 
-    public int getDuration() {
-        return isBound ? musicService.getDuration() : 0;
+    public int getCurrentPosition() {
+        return (isBound && musicService != null && musicService.getIsPrepared()) ? musicService.getCurrentPosition() : 0;
     }
 
     public void playNext() {
@@ -183,6 +183,12 @@ public class PlayerHelper<View> {
 
         if (imageUrl != null && !imageUrl.isEmpty()) ImageLoader.loadImage(context, imageUrl, coverView);
         else coverView.setImageResource(R.drawable.default_image);
+    }
+
+    public void setOnMediaPreparedListener(MusicService.OnMediaPreparedListener listener) {
+        if (musicService != null) {
+            musicService.setOnMediaPreparedListener(listener);
+        }
     }
 
     public void setupMiniPlayerControls(android.view.View miniPlayerView) {

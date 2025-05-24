@@ -53,14 +53,12 @@ public class FullPlayerActivity extends AppCompatActivity {
         mph.setListener(new PlayerHelper.MusicPlayerListener() {
             @Override
             public void onServiceConnected() {
-                updatePlayerUI(); // Forza l'aggiornamento iniziale
-                if(mph.isPlaying()) {
+                mph.setOnMediaPreparedListener(() -> runOnUiThread(() -> {
+                    updatePlayerUI(); // Forza l'aggiornamento iniziale
                     startUpdatingProgress();
-                } else {
-                    // Aggiorna manualmente lo stato se in pausa
-                    new Handler().post(() -> {
-                        updatePlayerUI();
-                    });
+                }));
+                if(mph.isPlaying()) {
+                    updatePlayerUI();
                 }
             }
 
@@ -76,6 +74,10 @@ public class FullPlayerActivity extends AppCompatActivity {
             Song currentSong = Song.getCurrentSong();
 
             if (currentSong != null) {
+
+                Log.e("Titolo", currentSong.getTitle());
+                Log.e("Autore", currentSong.getAuthor());
+
                 songTitle.setText(currentSong.getTitle());
                 artist.setText(currentSong.getAuthor());
 
@@ -84,7 +86,7 @@ public class FullPlayerActivity extends AppCompatActivity {
 
             seekBar.setMax(service.getDuration());
             seekBar.setProgress(service.getCurrentPosition());
-            totalDuration.setText(service.getDuration());
+            totalDuration.setText(formatTime(service.getDuration()));
             currentTime.setText(formatTime(service.getCurrentPosition()));
 
             mph.updatePlayPauseIcon(playPauseBtn);
@@ -159,11 +161,14 @@ public class FullPlayerActivity extends AppCompatActivity {
     }
 
     private void updatePlayerState() {
-        if(mph.getMusicService() != null) {
-            seekBar.setMax(99999);
-            seekBar.setProgress(mph.getCurrentPosition());
-            totalDuration.setText(mph.getDuration());
+        if (mph.getMusicService() != null) {
+            int duration = mph.getDuration();
+            if (duration > 0) {
+                seekBar.setMax(duration);
+                totalDuration.setText(formatTime(duration));
+            }
             currentTime.setText(formatTime(mph.getCurrentPosition()));
+            seekBar.setProgress(mph.getCurrentPosition());
         }
     }
 
@@ -171,15 +176,17 @@ public class FullPlayerActivity extends AppCompatActivity {
         mph.startUpdatingTime(currentTime, seekBar);
         new Handler(Looper.getMainLooper()).post(() -> {
             if(mph.isPlaying()) {
-                //seekBar.setMax();
-                totalDuration.setText(mph.getDuration());
+                seekBar.setMax(mph.getDuration());
+                totalDuration.setText(formatTime(mph.getDuration()));
             }
         });
     }
 
     private String formatTime(int milliseconds) {
-        int minutes = (milliseconds / 1000) / 60;
-        int seconds = (milliseconds / 1000) % 60;
+        if (milliseconds <= 0) return "00:00";
+        int totalSeconds = milliseconds / 1000;
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 

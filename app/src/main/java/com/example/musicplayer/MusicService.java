@@ -24,6 +24,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private List<Song> songList = new ArrayList<>();
     private static final int NOTIFICATION_ID = 1;
     private static final String CHANNEL_ID = "music_channel";
+    private boolean isPrepared = false;
 
     @Override
     public void onCreate() {
@@ -81,6 +82,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public void playSong(int position) {
         if (mediaPlayer != null) mediaPlayer.release();
+
+        isPrepared = false;
 
         try {
             mediaPlayer = new MediaPlayer();
@@ -161,6 +164,32 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return START_STICKY;
     }
 
+    // Aggiungi listener per preparazione media
+    public interface OnMediaPreparedListener {
+        void onMediaPrepared();
+    }
+    private OnMediaPreparedListener mediaPreparedListener;
+
+    public void setOnMediaPreparedListener(OnMediaPreparedListener listener) {
+        this.mediaPreparedListener = listener;
+    }
+
+    private void initializeMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(mp -> {
+            isPrepared = true;
+            if (mediaPreparedListener != null) {
+                mediaPreparedListener.onMediaPrepared();
+            }
+        });
+    }
+
+    // Modifica getDuration() per controllare lo stato
+    public int getDuration() {
+        return (mediaPlayer != null && isPrepared) ? mediaPlayer.getDuration() : 0;
+    }
+
+    public boolean getIsPrepared(){ return isPrepared; }
 
     public void seekTo(int position) {
         if (mediaPlayer != null) {
@@ -171,10 +200,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public int getCurrentPosition() {
         return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : lastKnownPosition;
-    }
-
-    public int getDuration() {
-        return mediaPlayer != null ? mediaPlayer.getDuration() : 0;
     }
 
     public void playNext() {

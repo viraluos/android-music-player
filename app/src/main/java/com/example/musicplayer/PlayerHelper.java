@@ -107,6 +107,7 @@ public class PlayerHelper<View> {
     }
 
     public int getCurrentPosition() {
+        Log.e("IsPreparedPlayerHelper", String.valueOf(musicService.getIsPrepared()));
         return (musicService != null && musicService.getIsPrepared()) ? musicService.getCurrentPosition() : 0;
     }
     public void setCurrentPosition(int position){ musicService.setCurrentPosition(position); }

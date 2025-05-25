@@ -121,7 +121,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        isPrepared = true;
         mp.start();
+        if (mediaPreparedListener != null) {
+            mediaPreparedListener.onMediaPrepared();
+        }
     }
 
     public void togglePlayPause() {
@@ -208,6 +212,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     // Modifica getDuration() per controllare lo stato
     public int getDuration() {
+        Log.e("Is Prepared", String.valueOf(isPrepared));
+        Log.e("Media Player", String.valueOf(mediaPlayer));
         return (mediaPlayer != null && isPrepared) ? mediaPlayer.getDuration() : 0;
     }
 
@@ -220,7 +226,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public int getCurrentPosition(){ return mediaPlayer != null ? Song.getPosition() : 0; }
+    public int getCurrentPosition(){
+        return (mediaPlayer != null && isPrepared) ? mediaPlayer.getCurrentPosition() : 0;
+    }
 
     public void setCurrentPosition(int position){ currentPosition = position; Song.setPosition(position); }
 

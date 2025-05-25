@@ -17,6 +17,8 @@ import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
 import com.example.musicplayer.data.api.Song;
 
+import java.security.Provider;
+
 public class FullPlayerActivity extends AppCompatActivity {
     private PlayerHelper mph;
     private SeekBar seekBar;
@@ -88,6 +90,8 @@ public class FullPlayerActivity extends AppCompatActivity {
             seekBar.setProgress(service.getCurrentPosition());
             totalDuration.setText(formatTime(service.getDuration()));
             currentTime.setText(formatTime(service.getCurrentPosition()));
+
+            Log.d("Durata totale", String.valueOf(service.getDuration()));
 
             mph.updatePlayPauseIcon(playPauseBtn);
         }

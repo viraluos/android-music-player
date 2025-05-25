@@ -13,6 +13,8 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import com.example.musicplayer.data.api.Song;
 
+import org.json.JSONStringer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,9 +100,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
             mediaPlayer = null;
         }
         Log.e("Indice canzone", String.valueOf(position));
-        currentPosition = position;
+        Song.setPosition(position);
         currentSong = songList.get(position);
         Song.setCurrentSong(currentSong);
+
+        Log.e("current position music service", Integer.toString(currentPosition));
 
         try {
             mediaPlayer = new MediaPlayer();
@@ -216,17 +220,20 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         }
     }
 
-    public int getCurrentPosition() {
-        return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : lastKnownPosition;
-    }
+    public int getCurrentPosition(){ return mediaPlayer != null ? Song.getPosition() : 0; }
+
+    public void setCurrentPosition(int position){ currentPosition = position; Song.setPosition(position); }
 
     public void playNext() {
+        Log.e("song list", songList.toString());
         if(songList == null || songList.isEmpty()) return;
 
-        if (songList.size() == 1) return;
+        if(songList.size() == 1) return;
 
-        currentPosition = (currentPosition + 1) % songList.size();
-        playSong(currentPosition);
+        int pos = Song.getPosition();
+        pos = (pos + 1) % songList.size();
+        Log.e("current position playnext", Integer.toString(pos));
+        playSong(pos);
     }
 
     public void playPrevious() {
@@ -234,9 +241,11 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
         if (songList.size() == 1) return;
 
-        currentPosition--;
-        if(currentPosition < 0) currentPosition = songList.size() - 1;
-        playSong(currentPosition);
+        int pos = Song.getPosition();
+        pos--;
+        if(pos < 0) pos = songList.size() - 1;
+        Log.e("current position playprevious", Integer.toString(pos));
+        playSong(pos);
     }
 
 

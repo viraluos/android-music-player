@@ -76,6 +76,8 @@ public class FullPlayerActivity extends AppCompatActivity {
                 Log.e("Titolo", currentSong.getTitle());
                 Log.e("Autore", currentSong.getAuthor());
 
+                Log.e("current position", Integer.toString(Song.getPosition()));
+
                 songTitle.setText(currentSong.getTitle());
                 artist.setText(currentSong.getAuthor());
 

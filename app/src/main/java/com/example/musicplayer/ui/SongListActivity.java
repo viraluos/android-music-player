@@ -41,6 +41,7 @@ public class SongListActivity extends AppCompatActivity {
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
     private PlayerHelper mph;
+    private int songPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,7 +233,8 @@ public class SongListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
             Song song = songs.get(position);
-            holder.bind(song);
+            Log.e("current position", Integer.toString(position));
+            holder.bind(song, position);
         }
 
         @Override
@@ -252,7 +254,7 @@ public class SongListActivity extends AppCompatActivity {
                 imageView = itemView.findViewById(R.id.songImage);
             }
 
-            public void bind(Song song) {
+            public void bind(Song song, int pos) {
                 titleView.setText(song.getTitle());
                 authorView.setText(song.getAuthor());
 
@@ -267,8 +269,12 @@ public class SongListActivity extends AppCompatActivity {
                     android.view.View mpv = findViewById(R.id.miniPlayer);
 
                     Song.setCurrentSong(song);
+                    Song.setPosition(pos);
+                    Log.e("current position porco cane", Integer.toString(pos));
                     mph.playSong();
                     updateMiniPlayer();
+
+                    songPosition++;
 
                 });
             }

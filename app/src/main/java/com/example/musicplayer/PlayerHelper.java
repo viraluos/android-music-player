@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -102,23 +103,21 @@ public class PlayerHelper<View> {
     }
 
     public int getDuration() {
-        return (isBound && musicService != null) ? musicService.getDuration() : 0;
+        return (musicService != null) ? musicService.getDuration() : 0;
     }
 
     public int getCurrentPosition() {
-        return (isBound && musicService != null && musicService.getIsPrepared()) ? musicService.getCurrentPosition() : 0;
+        return (musicService != null && musicService.getIsPrepared()) ? musicService.getCurrentPosition() : 0;
     }
+    public void setCurrentPosition(int position){ musicService.setCurrentPosition(position); }
 
     public void playNext() {
-        if (isBound) {
-            musicService.playNext();
-        }
+        Log.e("bound", Boolean.toString(isBound));
+        musicService.playNext();
     }
 
     public void playPrevious() {
-        if (isBound) {
-            musicService.playPrevious();
-        }
+        musicService.playPrevious();
     }
 
     private void updateTimeText(int milliseconds, TextView textView, SeekBar seek) {

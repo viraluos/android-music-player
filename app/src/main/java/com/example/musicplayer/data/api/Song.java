@@ -23,6 +23,7 @@ public class Song {
     @SerializedName("duration")
     public static String duration;
     public static Song currentSong;
+    public static int position;
 
     public String getId() { return id; }
 
@@ -58,5 +59,8 @@ public class Song {
         Song.currentSong = currentSong;
         Log.d("Song", "Canzone impostata: " + (currentSong != null ? currentSong.getTitle() : "null"));
     }
+
+    public static int getPosition(){ return position; }
+    public static void setPosition(int position){ Song.position = position; }
 
 }

@@ -81,6 +81,7 @@ public class SongListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (!mph.getIsBound()) mph.bindService(this);
+        updateMiniPlayer();
     }
 
     @Override
@@ -212,6 +213,7 @@ public class SongListActivity extends AppCompatActivity {
 
             findViewById(R.id.miniPlayer).setVisibility(View.VISIBLE);
         }
+        else findViewById(R.id.miniPlayer).setVisibility(View.GONE);
     }
 
     // Song Adapter class

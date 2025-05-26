@@ -166,7 +166,10 @@ public class PlayerHelper<View> {
         this.listener = listener;
     }
 
-    public void updateMiniPlayerUI(Song song, TextView titleView, TextView artistView, ImageView coverView, ImageView play_pause) {
+    public void updateMiniPlayerUI(Song pass_song, TextView titleView, TextView artistView, ImageView coverView, ImageView play_pause) {
+
+        Song song = Song.getCurrentSong() != null ? Song.getCurrentSong() : pass_song;
+
         titleView.setText(song.getTitle());
         artistView.setText(song.getAuthor());
         String imageUrl = song.getImage();

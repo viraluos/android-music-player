@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for (Playlist playlist : playlists) {
                         TextView playlistView = new TextView(MainActivity.this);
-                        playlistView.setText(playlist.name);
+                        playlistView.setText(playlist.getName());
                         playlistView.setTextSize(18);
                         playlistView.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.primary_text));
                         playlistView.setPadding(14, 14, 14, 14);
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
                         playlistView.setOnClickListener(v -> {
                             Intent intent = new Intent(MainActivity.this, SongListActivity.class);
-                            intent.putExtra("playlistNameBundle", playlist.name);
+                            intent.putExtra("playlistNameBundle", playlist.getName());
                             startActivity(intent);
                         });
 

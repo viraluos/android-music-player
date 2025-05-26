@@ -14,14 +14,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayer.Auth;
 import com.example.musicplayer.ImageLoader;
 import com.example.musicplayer.PlayerHelper;
 import com.example.musicplayer.R;
+import com.example.musicplayer.data.api.AddSongRequest;
+import com.example.musicplayer.data.api.AddSongResponse;
 import com.example.musicplayer.data.api.ApiClient;
+import com.example.musicplayer.data.api.Playlist;
+import com.example.musicplayer.data.api.PlaylistApiService;
+import com.example.musicplayer.data.api.PlaylistResponse;
 import com.example.musicplayer.data.api.SongApiService;
 import com.example.musicplayer.data.api.Song;
 
@@ -41,7 +48,7 @@ public class SongListActivity extends AppCompatActivity {
     private SongAdapter songAdapter;
     private List<Song> songList = new ArrayList<>();
     private PlayerHelper mph;
-    private int songPosition = 0;
+    private boolean general = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +118,8 @@ public class SongListActivity extends AppCompatActivity {
 
                     if (response.isSuccessful() && response.body() != null) {
 
+                        //general = true;
+
                         List<Song> res = response.body();
 
                         songList.clear();
@@ -138,6 +147,7 @@ public class SongListActivity extends AppCompatActivity {
             });
         }
         else{
+            //general = false;
             apiService.getSongsFromPlaylist(pname).enqueue(new Callback<List<Song>>() {
                 @Override
                 public void onResponse(Call<List<Song>> call, Response<List<Song>> response) {
@@ -248,17 +258,23 @@ public class SongListActivity extends AppCompatActivity {
             private TextView titleView;
             private TextView authorView;
             private ImageView imageView;
+            private ImageView aggiungiPlaylist;
+            private PlaylistApiService playlistApiService;
 
             public SongViewHolder(@NonNull View itemView) {
                 super(itemView);
                 titleView = itemView.findViewById(R.id.songTitle);
                 authorView = itemView.findViewById(R.id.songAuthor);
                 imageView = itemView.findViewById(R.id.songImage);
+                aggiungiPlaylist = itemView.findViewById(R.id.plus);
+                playlistApiService = ApiClient.getClient(getApplicationContext()).create(PlaylistApiService.class);
             }
 
             public void bind(Song song, int pos) {
                 titleView.setText(song.getTitle());
                 authorView.setText(song.getAuthor());
+
+                aggiungiPlaylist.setOnClickListener(v -> { showPlaylistSelectionDialog(song.getId()); });
 
                 if (song.getImage() != null && !song.getImage().isEmpty()) ImageLoader.loadImage(getApplicationContext(), song.getImage(), imageView);
                 else imageView.setImageResource(R.drawable.default_image);
@@ -276,8 +292,59 @@ public class SongListActivity extends AppCompatActivity {
                     mph.playSong();
                     updateMiniPlayer();
 
-                    songPosition++;
+                });
+            }
 
+            private void showPlaylistSelectionDialog(String songId) {
+                String token = Auth.getToken(getApplicationContext());
+
+                Log.e("token songlist", token);
+
+                playlistApiService.getUserPlaylists("Bearer " + token).enqueue(new Callback<List<Playlist>>() {
+                    @Override
+                    public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+                        if (response.isSuccessful()) {
+                            showPlaylistDialog(response.body(), songId);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Playlist>> call, Throwable t) {}
+                });
+            }
+
+            private void showPlaylistDialog(List<Playlist> playlists, String songId) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SongListActivity.this);
+                builder.setTitle("Scegli playlist");
+
+                String[] names = playlists.stream().map(Playlist::getName).toArray(String[]::new);
+
+                builder.setItems(names, (dialog, which) -> {
+                    String playlistId = playlists.get(which).getId();
+                    addSongToPlaylist(playlistId, songId);
+                });
+
+                builder.setNegativeButton("Annulla", null);
+                builder.show();
+            }
+
+            private void addSongToPlaylist(String playlistId, String songId) {
+                Log.e("playlistid", playlistId);
+                Log.e("songid", songId);
+
+                AddSongRequest request = new AddSongRequest(playlistId, songId);
+                String token = Auth.getToken(getApplicationContext());
+
+                playlistApiService.addSongToPlaylist("Bearer " + token, request).enqueue(new Callback<PlaylistResponse>() {
+                    @Override
+                    public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(SongListActivity.this, "Aggiunto a playlist!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PlaylistResponse> call, Throwable t) {}
                 });
             }
         }

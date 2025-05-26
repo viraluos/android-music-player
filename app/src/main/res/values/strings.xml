@@ -236,7 +236,7 @@
     <string name="timing_out">Timeout</string>
     <string name="retrying">Riprova</string>
     <string name="waiting">Attesa</string>
-
+    <string name="add_to_playlist">Aggiungi alla playlist</string>
     <string name="logout_success">Logout effettuato con successo</string>
     <string name="login_required">Devi effettuare il login</string>
 </resources>

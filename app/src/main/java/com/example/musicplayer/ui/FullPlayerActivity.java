@@ -25,6 +25,8 @@ public class FullPlayerActivity extends AppCompatActivity {
     private TextView currentTime, totalDuration, songTitle, artist;
     private ImageView coverArt, playPauseBtn, prevBtn, nextBtn;
 
+    private boolean isActivityRunning = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,30 +71,22 @@ public class FullPlayerActivity extends AppCompatActivity {
     }
 
     private void updatePlayerUI() {
-        if (mph.getMusicService() != null) {
-            MusicService service = mph.getMusicService();
-            Song currentSong = Song.getCurrentSong();
+        if (!isActivityRunning || mph.getMusicService() == null) return;
 
-            if (currentSong != null) {
+        MusicService service = mph.getMusicService();
+        Song currentSong = Song.getCurrentSong();
 
-                Log.e("Titolo", currentSong.getTitle());
-                Log.e("Autore", currentSong.getAuthor());
+        if (currentSong != null) {
+            songTitle.setText(currentSong.getTitle());
+            artist.setText(currentSong.getAuthor());
+            ImageLoader.loadImage(getApplicationContext(), currentSong.getImage(), coverArt);
+        }
 
-                Log.e("current position", Integer.toString(Song.getPosition()));
-
-                songTitle.setText(currentSong.getTitle());
-                artist.setText(currentSong.getAuthor());
-
-                ImageLoader.loadImage(this, currentSong.getImage(), coverArt);
-            }
-
+        if (service != null) {
             seekBar.setMax(service.getDuration());
             seekBar.setProgress(service.getCurrentPosition());
             totalDuration.setText(formatTime(service.getDuration()));
             currentTime.setText(formatTime(service.getCurrentPosition()));
-
-            Log.d("Durata totale", String.valueOf(service.getDuration()));
-
             mph.updatePlayPauseIcon(playPauseBtn);
         }
     }
@@ -207,6 +201,7 @@ public class FullPlayerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isActivityRunning = false;
         mph.unbindService(this);
     }
 }

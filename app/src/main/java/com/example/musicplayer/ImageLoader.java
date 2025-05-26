@@ -43,34 +43,38 @@ public class ImageLoader {
             testImageConnection(url);
         }).start();
 
-        Glide.with(context)
-                .load(url)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                Target<Drawable> target, boolean isFirstResource) {
+        if (url != null && !url.isEmpty()) {
+            Glide.with(context)
+                    .load(url)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                    Target<Drawable> target, boolean isFirstResource) {
 
-                        new Thread(() -> {
-                            // Test diretto della connessione
-                            testImageConnection(url);
-                        }).start();
+                            new Thread(() -> {
+                                // Test diretto della connessione
+                                testImageConnection(url);
+                            }).start();
 
-                        return false;
-                    }
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model,
-                                                   Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .apply(new RequestOptions()
-                        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .skipMemoryCache(false)
-                        .error(R.drawable.error_image))
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(imageView);
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model,
+                                                       Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .apply(new RequestOptions()
+                            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .skipMemoryCache(false)
+                            .error(R.drawable.error_image))
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.default_image);
+        }
     }
 
     public static OkHttpClient createSecureClient(Context context) {

@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         playlistApiService = ApiClient.getClient(getApplicationContext()).create(PlaylistApiService.class);
 
         fetchRandomSongs();
-        fetchPlaylistsDynamically();
+        //fetchPlaylistsDynamically();
         fetchUserPlaylists();
 
         TextView playlist_plus = findViewById(R.id.playlist_plus);
@@ -200,9 +200,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchUserPlaylists() {
         String token = Auth.getToken(this);
-        if (token == null) return;
 
-        playlistApiService.getUserPlaylists(token).enqueue(new Callback<List<Playlist>>() {
+        if (token == null) return;
+        Log.e("token mainact", token);
+
+        playlistApiService.getUserPlaylists("Bearer " + token).enqueue(new Callback<List<Playlist>>() {
             @Override
             public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
                 if (response.isSuccessful()) {

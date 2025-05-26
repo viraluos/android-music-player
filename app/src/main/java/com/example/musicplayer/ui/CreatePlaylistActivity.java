@@ -50,7 +50,7 @@ public class CreatePlaylistActivity extends AppCompatActivity {
         }
 
         PlaylistRequest request = new PlaylistRequest(name);
-        apiService.createPlaylist(token, request).enqueue(new Callback<PlaylistResponse>() {
+        apiService.createPlaylist("Bearer " + token, request).enqueue(new Callback<PlaylistResponse>() {
             @Override
             public void onResponse(Call<PlaylistResponse> call, Response<PlaylistResponse> response) {
                 if (response.isSuccessful()) {

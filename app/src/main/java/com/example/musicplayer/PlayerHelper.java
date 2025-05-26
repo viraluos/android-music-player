@@ -97,7 +97,7 @@ public class PlayerHelper<View> {
     public void playSong(int currentPosition){ musicService.playSong(currentPosition); }
 
     public void seekTo(int position) {
-        if (isBound) {
+        if (isBound && musicService != null) {
             musicService.seekTo(position);
         }
     }

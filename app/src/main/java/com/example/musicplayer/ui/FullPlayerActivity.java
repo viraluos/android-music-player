@@ -127,13 +127,26 @@ public class FullPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(mph.getMusicService() != null) {
-                    mph.seekTo(seekBar.getProgress());
-                    currentTime.setText(formatTime(seekBar.getProgress()));
+                MusicService svc = mph.getMusicService();
+                if (svc != null) {
+                    int newPosition = seekBar.getProgress();
+                    boolean wasPlaying = svc.isPlaying();
 
-                    if(mph.isPlaying()) {
-                        mph.startUpdatingTime(currentTime, seekBar);
+                    if (wasPlaying) {
+                        svc.pause();
                     }
+
+                    svc.seekTo(newPosition);
+
+                    currentTime.setText(formatTime(newPosition));
+                    seekBar.setProgress(newPosition);
+
+                    if (wasPlaying) {
+                        svc.resume();
+                    }
+
+                    mph.stopUpdatingTime();
+                    mph.startUpdatingTime(currentTime, seekBar);
                 }
             }
         });

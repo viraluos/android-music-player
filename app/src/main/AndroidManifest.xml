@@ -31,6 +31,7 @@
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.RegisterActivity" />
         <activity android:name=".ui.FullPlayerActivity" />
+        <activity android:name=".ui.CreatePlaylistActivity" />
     </application>
 
 </manifest>

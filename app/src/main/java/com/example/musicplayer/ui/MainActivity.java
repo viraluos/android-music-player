@@ -19,11 +19,13 @@ import com.example.musicplayer.Auth;
 import com.example.musicplayer.data.api.ApiClient;
 import com.example.musicplayer.data.api.AuthApiService;
 import com.example.musicplayer.data.api.Playlist;
+import com.example.musicplayer.data.api.PlaylistApiService;
 import com.example.musicplayer.data.api.Song;
 import com.example.musicplayer.data.api.SongApiService;
 
 import java.util.List;
 
+import kotlin.random.jdk8.PlatformThreadLocalRandom;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PlayerHelper mph;
     private SongApiService apiService;
+    private PlaylistApiService playlistApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +85,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         apiService = ApiClient.getClient(getApplicationContext()).create(SongApiService.class);
+        playlistApiService = ApiClient.getClient(getApplicationContext()).create(PlaylistApiService.class);
 
         fetchRandomSongs();
         fetchPlaylistsDynamically();
+        fetchUserPlaylists();
+
+        TextView playlist_plus = findViewById(R.id.playlist_plus);
+
+        playlist_plus.setOnClickListener(v -> {
+            startActivity(new Intent(this, CreatePlaylistActivity.class));
+        });
     }
 
     private void updateMiniPlayer() {
@@ -185,6 +196,53 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Retrofit", "Errore: " + t.getMessage());
             }
         });
+    }
+
+    private void fetchUserPlaylists() {
+        String token = Auth.getToken(this);
+        if (token == null) return;
+
+        playlistApiService.getUserPlaylists(token).enqueue(new Callback<List<Playlist>>() {
+            @Override
+            public void onResponse(Call<List<Playlist>> call, Response<List<Playlist>> response) {
+                if (response.isSuccessful()) {
+                    showUserPlaylists(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Playlist>> call, Throwable t) {
+                Log.e("Playlists", "Error loading user playlists", t);
+            }
+        });
+    }
+
+    private void showUserPlaylists(List<Playlist> playlists) {
+        LinearLayout playlistContainer = findViewById(R.id.playlist_container);
+
+        for (Playlist playlist : playlists) {
+            TextView playlistView = new TextView(MainActivity.this);
+            playlistView.setText(playlist.getName());
+            playlistView.setTextSize(18);
+            playlistView.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.primary_text));
+            playlistView.setPadding(14, 14, 14, 14);
+            playlistView.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.rounded_background));
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            layoutParams.setMargins(0, 0, 0, 10);
+            playlistView.setLayoutParams(layoutParams);
+
+            playlistView.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SongListActivity.class);
+                intent.putExtra("playlistNameBundle", playlist.getName());
+                startActivity(intent);
+            });
+
+            playlistContainer.addView(playlistView);
+        }
     }
 
     @Override
